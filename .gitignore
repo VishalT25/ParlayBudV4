@@ -21,6 +21,7 @@ parlay_ml.db
 parlaybudv4/node_modules/
 parlaybudv4/.svelte-kit/
 parlaybudv4/build/
+parlaybudv4/.vercel/
 parlaybudv4/.env
 parlaybudv4/.env.local
 
