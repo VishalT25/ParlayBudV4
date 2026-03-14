@@ -1,0 +1,36 @@
+# ── Python ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.env
+.venv/
+venv/
+
+# ML model files (large binary, kept locally) — re-train to regenerate
+models/*.pkl
+
+# Database (large, local only)
+parlay_ml.db
+
+# ── Node / SvelteKit ─────────────────────────────────────
+parlaybudv4/node_modules/
+parlaybudv4/.svelte-kit/
+parlaybudv4/build/
+parlaybudv4/.env
+parlaybudv4/.env.local
+
+# ── macOS ────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── Editor ───────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
