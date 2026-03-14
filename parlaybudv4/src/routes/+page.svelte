@@ -6,11 +6,17 @@
   import ParlayCard from '$lib/components/ParlayCard.svelte';
   import InjuriesList from '$lib/components/InjuriesList.svelte';
   import PicksTable from '$lib/components/PicksTable.svelte';
+  import DateNav from '$lib/components/DateNav.svelte';
 
   export let data: PageData;
 
   $: picks = data.picks;
-  $: isDemo = data.isDemo;
+  $: isDemo = data.isDemo ?? false;
+  $: legHistory = data.legHistory ?? {};
+
+  function getHistory(player: string, stat: string) {
+    return legHistory[`${player}|${stat}`];
+  }
 
   $: lockPicks = picks
     ? picks.picks.filter((p: Pick) => picks!.locks.includes(p.player))
@@ -35,13 +41,22 @@
 <div class="page">
   <div class="container">
 
+    <!-- Date Navigation (always shown) -->
+    <DateNav
+      date={data.date}
+      today={data.today}
+      prevDate={data.prevDate}
+      nextDate={data.nextDate}
+      availableDates={data.availableDates}
+    />
+
     {#if !picks}
       <!-- Empty State -->
       <div class="empty-state glass">
         <div class="empty-icon">🏀</div>
         <h2 class="empty-title">No Picks Available</h2>
-        <p class="empty-desc">Today's ML model picks haven't been generated yet. Check back after 2 PM EST when game lines are posted.</p>
-        <div class="empty-hint">Looking for: <code>/picks/{new Date().toISOString().split('T')[0]}.json</code></div>
+        <p class="empty-desc">{data.date === data.today ? "Today's" : 'No'} ML model picks {data.date === data.today ? "haven't been generated yet. Check back after 2 PM EST when game lines are posted." : `available for ${data.date}.`}</p>
+        <div class="empty-hint">Looking for: <code>/picks/{data.date}.json</code></div>
       </div>
     {:else}
       <!-- Demo Banner -->
@@ -133,7 +148,7 @@
             </div>
             <div class="locks-grid">
               {#each lockPicks as pick}
-                <PickCard {pick} isLock={true} />
+                <PickCard {pick} isLock={true} history={getHistory(pick.player, pick.stat)} />
               {/each}
             </div>
           </section>
@@ -175,7 +190,7 @@
               </div>
               <div class="other-picks-grid">
                 {#each otherPicks as pick}
-                  <PickCard {pick} isLock={false} />
+                  <PickCard {pick} isLock={false} history={getHistory(pick.player, pick.stat)} />
                 {/each}
               </div>
             </section>

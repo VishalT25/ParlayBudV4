@@ -6,7 +6,9 @@
 
   export let pick: Pick;
   export let isLock: boolean = false;
+  export let history: { attempts: number; hits: number; recent: boolean[] } | undefined = undefined;
 
+  $: hitRate = history && history.attempts > 0 ? history.hits / history.attempts : null;
   $: teamColor = getTeamColor(pick.team);
   $: statColor = getStatColor(pick.stat);
   $: logoUrl = getTeamLogoUrl(pick.team);
@@ -105,6 +107,33 @@
         EV: <span style="color: #22c55e;">+{(pick.ev * 100).toFixed(1)}%</span>
       </div>
     </div>
+
+    {#if history && history.attempts > 0}
+      <div class="past-record">
+        <div class="past-header">
+          <span class="past-label">Past {history.attempts}</span>
+          <span
+            class="past-rate"
+            style="color: {hitRate !== null && hitRate >= 0.7 ? '#22c55e' : hitRate !== null && hitRate >= 0.55 ? '#f59e0b' : '#ef4444'};"
+          >
+            {history.hits}/{history.attempts}
+            <span class="past-pct">({hitRate !== null ? (hitRate * 100).toFixed(0) : 0}%)</span>
+          </span>
+        </div>
+        <div class="dot-row">
+          {#each history.recent as hit}
+            <span class="result-dot" class:dot-hit={hit} class:dot-miss={!hit}></span>
+          {/each}
+          {#if history.attempts === 0}
+            <span class="no-history">No previous data</span>
+          {/if}
+        </div>
+      </div>
+    {:else if history !== undefined}
+      <div class="past-record past-record--empty">
+        <span class="past-label">No previous data for this prop</span>
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -400,5 +429,81 @@
   font-size: 11px;
   color: var(--text-muted);
   font-weight: 500;
+}
+
+/* Past record strip */
+.past-record {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 7px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.past-record--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.past-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.past-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.past-rate {
+  font-size: 11px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.past-pct {
+  font-size: 9px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.dot-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.result-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-hit {
+  background: var(--accent-green);
+  box-shadow: 0 0 4px rgba(34,197,94,0.5);
+}
+
+.dot-miss {
+  background: var(--accent-red);
+  box-shadow: 0 0 4px rgba(239,68,68,0.3);
+}
+
+.no-history {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+@keyframes live-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 </style>

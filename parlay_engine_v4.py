@@ -709,8 +709,14 @@ def export_json(picks, injuries, games, has_live, models, args, min_prob):
         "results": None,
     }
 
+    class _Encoder(json.JSONEncoder):
+        def default(self, obj):
+            if hasattr(obj, 'item'):   # numpy scalar (float32, int64, etc.)
+                return obj.item()
+            return super().default(obj)
+
     with open(out_path, 'w') as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, cls=_Encoder)
 
     print(f"\n✅ JSON exported → {out_path}")
     return out_path

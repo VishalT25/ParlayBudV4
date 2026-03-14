@@ -1,28 +1,75 @@
 import type { PageLoad } from './$types';
 import type { DayPicks } from '$lib/types';
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: PageLoad = async ({ fetch, url }) => {
   const today = new Date().toISOString().split('T')[0];
+  const requestedDate = url.searchParams.get('date') || today;
 
+  // Load the requested date's picks
+  let picks: DayPicks | null = null;
   try {
-    const res = await fetch(`/picks/${today}.json`);
-    if (!res.ok) {
-      // Try previous day as fallback for demo
-      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-      const res2 = await fetch(`/picks/${yesterday}.json`);
-      if (res2.ok) {
-        const data: DayPicks = await res2.json();
-        return { picks: data, isDemo: true };
-      }
-      // Try 2026-03-13 as demo
-      const demo = await fetch('/picks/2026-03-13.json');
-      if (demo.ok) {
-        return { picks: await demo.json() as DayPicks, isDemo: true };
-      }
-      return { picks: null, isDemo: false };
-    }
-    return { picks: await res.json() as DayPicks, isDemo: false };
-  } catch {
-    return { picks: null, isDemo: false };
+    const res = await fetch(`/picks/${requestedDate}.json`);
+    if (res.ok) picks = await res.json();
+  } catch { /* no file for this date */ }
+
+  // Scan the past 30 days before requestedDate for historical leg results
+  const pastDates: string[] = [];
+  const base = new Date(requestedDate + 'T12:00:00');
+  for (let i = 1; i <= 30; i++) {
+    const d = new Date(base.getTime() - i * 86400000);
+    pastDates.push(d.toISOString().split('T')[0]);
   }
+
+  // Fetch all past pick files in parallel (will 404 silently for missing dates)
+  const pastDays = (
+    await Promise.all(
+      pastDates.map(async (date) => {
+        try {
+          const res = await fetch(`/picks/${date}.json`);
+          if (!res.ok) return null;
+          return (await res.json()) as DayPicks;
+        } catch {
+          return null;
+        }
+      })
+    )
+  ).filter(Boolean) as DayPicks[];
+
+  // Build per-leg history: "Player|STAT" → { attempts, hits, results[] }
+  type LegHistory = { attempts: number; hits: number; recent: boolean[] };
+  const legMap: Record<string, LegHistory> = {};
+
+  // Also collect all dates that had picks files (for nav availability hints)
+  const availableDates: string[] = [];
+
+  for (const day of pastDays) {
+    availableDates.push(day.date);
+    if (!day.results?.details) continue;
+    for (const detail of day.results.details) {
+      const key = `${detail.player}|${detail.stat}`;
+      if (!legMap[key]) legMap[key] = { attempts: 0, hits: 0, recent: [] };
+      legMap[key].attempts++;
+      if (detail.hit) legMap[key].hits++;
+      legMap[key].recent.unshift(detail.hit); // newest first
+    }
+  }
+
+  // Trim recent to last 10 for display
+  for (const key of Object.keys(legMap)) {
+    legMap[key].recent = legMap[key].recent.slice(0, 10);
+  }
+
+  // Prev/next dates for navigation (just day-by-day, page shows empty state if no file)
+  const prevDate = new Date(base.getTime() - 86400000).toISOString().split('T')[0];
+  const nextDate = new Date(base.getTime() + 86400000).toISOString().split('T')[0];
+
+  return {
+    picks,
+    date: requestedDate,
+    today,
+    prevDate,
+    nextDate,
+    availableDates: availableDates.sort(),
+    legHistory: legMap,
+  };
 };
