@@ -1,188 +1,489 @@
 {
   "date": "2026-03-13",
-  "generated_at": "2026-03-13T14:30:00Z",
+  "generated_at": "2026-03-14T03:59:31Z",
   "model_version": "v4-xgboost",
   "games": [
-    {"away": "CLE", "home": "DAL", "label": "CLE @ DAL"},
-    {"away": "BOS", "home": "MIA", "label": "BOS @ MIA"},
-    {"away": "LAL", "home": "DEN", "label": "LAL @ DEN"},
-    {"away": "PHI", "home": "MIL", "label": "PHI @ MIL"}
+    {
+      "away": "MEM",
+      "home": "DET",
+      "label": "MEM @ DET"
+    },
+    {
+      "away": "NYK",
+      "home": "IND",
+      "label": "NYK @ IND"
+    },
+    {
+      "away": "PHX",
+      "home": "TOR",
+      "label": "PHX @ TOR"
+    },
+    {
+      "away": "CLE",
+      "home": "DAL",
+      "label": "CLE @ DAL"
+    },
+    {
+      "away": "NOP",
+      "home": "HOU",
+      "label": "NOP @ HOU"
+    },
+    {
+      "away": "MIN",
+      "home": "GSW",
+      "label": "MIN @ GSW"
+    },
+    {
+      "away": "UTAH",
+      "home": "POR",
+      "label": "UTAH @ POR"
+    },
+    {
+      "away": "CHI",
+      "home": "LAC",
+      "label": "CHI @ LAC"
+    }
   ],
   "injuries": [
-    {"player": "Luka Doncic", "status": "OUT", "reason": "Ankle sprain"},
-    {"player": "Joel Embiid", "status": "OUT", "reason": "Knee"},
-    {"player": "Anthony Davis", "status": "QUESTIONABLE", "reason": "Back"},
-    {"player": "Jayson Tatum", "status": "PROBABLE", "reason": "Ankle"}
-  ],
-  "picks": [
     {
-      "player": "Donovan Mitchell",
-      "team": "CLE",
-      "opponent": "DAL",
-      "game": "CLE @ DAL",
-      "stat": "PTS",
-      "line": 24.5,
-      "over_odds": -115,
-      "book": "DraftKings",
-      "model_prob": 0.726,
-      "implied_prob": 0.535,
-      "edge": 0.191,
-      "ev": 0.356,
-      "season_avg": 28.6,
-      "last_5_avg": 26.2,
-      "last_3_avg": 28.0,
-      "is_home": 0,
-      "has_live_line": true
+      "player": "Jonathan Kuminga",
+      "status": "OUT",
+      "reason": ""
     },
     {
-      "player": "Jaylen Brown",
-      "team": "BOS",
-      "opponent": "MIA",
-      "game": "BOS @ MIA",
-      "stat": "PTS",
-      "line": 23.5,
-      "over_odds": -110,
-      "book": "FanDuel",
-      "model_prob": 0.714,
-      "implied_prob": 0.524,
-      "edge": 0.190,
-      "ev": 0.340,
-      "season_avg": 26.1,
-      "last_5_avg": 25.8,
-      "last_3_avg": 27.3,
-      "is_home": 0,
-      "has_live_line": true
+      "player": "Nikola Vucevic",
+      "status": "OUT",
+      "reason": ""
     },
     {
-      "player": "Karl-Anthony Towns",
-      "team": "NYK",
-      "opponent": "MIL",
-      "game": "PHI @ MIL",
-      "stat": "REB",
-      "line": 9.5,
-      "over_odds": -120,
-      "book": "BetMGM",
-      "model_prob": 0.739,
-      "implied_prob": 0.545,
-      "edge": 0.194,
-      "ev": 0.378,
-      "season_avg": 11.8,
-      "last_5_avg": 12.2,
-      "last_3_avg": 13.0,
-      "is_home": 1,
-      "has_live_line": true
+      "player": "Drake Powell",
+      "status": "OUT",
+      "reason": ""
     },
     {
-      "player": "LeBron James",
-      "team": "LAL",
-      "opponent": "DEN",
-      "game": "LAL @ DEN",
-      "stat": "AST",
-      "line": 7.5,
-      "over_odds": -108,
-      "book": "DraftKings",
-      "model_prob": 0.701,
-      "implied_prob": 0.519,
-      "edge": 0.182,
-      "ev": 0.318,
-      "season_avg": 8.9,
-      "last_5_avg": 9.2,
-      "last_3_avg": 10.0,
-      "is_home": 0,
-      "has_live_line": true
+      "player": "Nic Claxton",
+      "status": "OUT",
+      "reason": ""
     },
     {
-      "player": "Jayson Tatum",
-      "team": "BOS",
-      "opponent": "MIA",
-      "game": "BOS @ MIA",
-      "stat": "PTS",
-      "line": 27.5,
-      "over_odds": -105,
-      "book": "FanDuel",
-      "model_prob": 0.678,
-      "implied_prob": 0.512,
-      "edge": 0.166,
-      "ev": 0.289,
-      "season_avg": 29.8,
-      "last_5_avg": 28.4,
-      "last_3_avg": 30.7,
-      "is_home": 0,
-      "has_live_line": true
+      "player": "Day'Ron Sharpe",
+      "status": "OUT",
+      "reason": ""
     },
     {
-      "player": "Nikola Jokic",
-      "team": "DEN",
-      "opponent": "LAL",
-      "game": "LAL @ DEN",
-      "stat": "REB",
-      "line": 11.5,
-      "over_odds": -115,
-      "book": "BetMGM",
-      "model_prob": 0.741,
-      "implied_prob": 0.535,
-      "edge": 0.206,
-      "ev": 0.401,
-      "season_avg": 13.2,
-      "last_5_avg": 14.0,
-      "last_3_avg": 13.7,
-      "is_home": 1,
-      "has_live_line": true
+      "player": "Egor Demin",
+      "status": "OUT",
+      "reason": ""
     },
     {
-      "player": "Giannis Antetokounmpo",
-      "team": "MIL",
-      "opponent": "PHI",
-      "game": "PHI @ MIL",
-      "stat": "PTS",
-      "line": 31.5,
-      "over_odds": -112,
-      "book": "DraftKings",
-      "model_prob": 0.693,
-      "implied_prob": 0.528,
-      "edge": 0.165,
-      "ev": 0.292,
-      "season_avg": 33.4,
-      "last_5_avg": 32.8,
-      "last_3_avg": 35.0,
-      "is_home": 1,
-      "has_live_line": true
+      "player": "Tidjane Salaun",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Liam McNeeley",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jalen Smith",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Collin Sexton",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Isaac Okoro",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anfernee Simons",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jaden Ivey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach Collins",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Noa Essengue",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Proctor",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Max Strus",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jarrett Allen",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kyrie Irving",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Dereck Lively II",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Peyton Watson",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Ausar Thompson",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Draymond Green",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Moses Moody",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Stephen Curry",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jimmy Butler III",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jae'Sean Tate",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Steven Adams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Fred VanVleet",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Pascal Siakam",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Johnny Furphy",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Haliburton",
+      "status": "OUT",
+      "reason": ""
     },
     {
       "player": "Darius Garland",
-      "team": "CLE",
-      "opponent": "DAL",
-      "game": "CLE @ DAL",
-      "stat": "AST",
-      "line": 6.5,
-      "over_odds": -110,
-      "book": "FanDuel",
-      "model_prob": 0.687,
-      "implied_prob": 0.524,
-      "edge": 0.163,
-      "ev": 0.281,
-      "season_avg": 7.8,
-      "last_5_avg": 7.2,
-      "last_3_avg": 8.3,
-      "is_home": 0,
-      "has_live_line": true
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "John Collins",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Yanic Konan Niederhauser",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Bradley Beal",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Maxi Kleber",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Walter Clayton Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Santi Aldama",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Scotty Pippen Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Ja Morant",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach Edey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Brandon Clarke",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kentavious Caldwell-Pope",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Nikola Jovic",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Norman Powell",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Andrew Wiggins",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Terry Rozier",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Cormac Ryan",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Miles McBride",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Branden Carlson",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jalen Williams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Isaiah Hartenstein",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Thomas Sorber",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Alex Morales",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jonathan Isaac",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Franz Wagner",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anthony Black",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Joel Embiid",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kelly Oubre Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Maxey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Johni Broome",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Dillon Brooks",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Mark Williams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Robert Williams III",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Shaedon Sharpe",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Damian Lillard",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Keegan Murray",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Drew Eubanks",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Devin Carter",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "De'Andre Hunter",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Domantas Sabonis",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach LaVine",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "David Jones Garcia",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Collin Murray-Boyles",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Chucky Hepburn",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Keyonte George",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "John Konchar",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Lauri Markkanen",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jusuf Nurkic",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jaren Jackson Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Walker Kessler",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anthony Davis",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kyshawn George",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "D'Angelo Russell",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Cam Whitmore",
+      "status": "OUT",
+      "reason": ""
     }
   ],
-  "locks": ["Donovan Mitchell", "Karl-Anthony Towns", "Nikola Jokic"],
-  "parlay_3leg": {
-    "legs": ["Donovan Mitchell PTS O24.5", "Karl-Anthony Towns REB O9.5", "Nikola Jokic REB O11.5"],
-    "combined_prob": 0.397,
-    "players": ["Donovan Mitchell", "Karl-Anthony Towns", "Nikola Jokic"]
-  },
-  "parlay_5leg": {
-    "legs": ["Donovan Mitchell PTS O24.5", "Jaylen Brown PTS O23.5", "Karl-Anthony Towns REB O9.5", "Nikola Jokic REB O11.5", "LeBron James AST O7.5"],
-    "combined_prob": 0.197,
-    "players": ["Donovan Mitchell", "Jaylen Brown", "Karl-Anthony Towns", "Nikola Jokic", "LeBron James"]
-  },
-  "model_stats": {
-    "PTS": {"auc": 0.626, "hit_rate_70": 0.733},
-    "REB": {"auc": 0.617, "hit_rate_70": 0.728},
-    "AST": {"auc": 0.658, "hit_rate_70": 0.743}
-  },
-  "results": null
-}
+  "picks": [
+    {
+      "player": "Guerschon Yabusele",
+      "team": "CHI",
+      "opponent": "LAC",
+      "game": "CHI @ LAC",
+      "stat": "REB",
+      "line": 3.5,
+      "over_odds": -108,
+      "book": "FanDuel",
+      "model_prob": 
