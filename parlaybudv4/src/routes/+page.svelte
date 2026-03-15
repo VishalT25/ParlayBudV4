@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
-  import { browser } from '$app/environment';
+  import { afterNavigate } from '$app/navigation';
   import type { PageData } from './$types';
   import type { Pick, LivePickStatus } from '$lib/types';
   import { formatDate } from '$lib/utils';
@@ -21,6 +21,9 @@
   }
 
   // ── Live status polling ────────────────────────────────────────────────────
+  // afterNavigate is browser-only (never runs during SSR) and fires on:
+  //   • initial page load (after hydration completes)
+  //   • every subsequent client-side navigation (e.g. date change)
   let liveData: Record<string, unknown> = {};
   let liveInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -31,22 +34,16 @@
     } catch { /* silent fail */ }
   }
 
-  function stopPolling() {
+  afterNavigate(() => {
     if (liveInterval) { clearInterval(liveInterval); liveInterval = null; }
     liveData = {};
-  }
-
-  // `browser` is false during SSR — this block only runs in the browser.
-  // Reactive on data.date so it re-evaluates when the user navigates between dates.
-  $: if (browser) {
-    stopPolling();
     if (data.date === data.today) {
       fetchLive();
       liveInterval = setInterval(fetchLive, 60_000);
     }
-  }
+  });
 
-  onDestroy(stopPolling);
+  onDestroy(() => { if (liveInterval) clearInterval(liveInterval); });
 
   function getPickLiveStatus(pick: Pick): LivePickStatus | null {
     const raw = liveData[pick.player.toLowerCase()] as Record<string, unknown> | undefined;
