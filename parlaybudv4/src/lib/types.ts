@@ -76,6 +76,18 @@ export interface DayPicks {
   results: Results | null;
 }
 
+export interface LivePickStatus {
+  value: number;          // current stat value matching pick.stat
+  gameStatus: 'pre' | 'live' | 'final';
+  period?: number;
+  clock?: string;
+  homeTeam?: string;
+  awayTeam?: string;
+  homeScore?: number;
+  awayScore?: number;
+  gameTime?: string;      // ISO string for pre-game tipoff
+}
+
 export interface HistorySummary {
   date: string;
   picks_total: number;

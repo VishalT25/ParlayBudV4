@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import type { PageData } from './$types';
-  import type { Pick } from '$lib/types';
+  import type { Pick, LivePickStatus } from '$lib/types';
   import { formatDate } from '$lib/utils';
   import PickCard from '$lib/components/PickCard.svelte';
   import ParlayCard from '$lib/components/ParlayCard.svelte';
@@ -16,6 +17,64 @@
 
   function getHistory(player: string, stat: string) {
     return legHistory[`${player}|${stat}`];
+  }
+
+  // ── Live status polling ────────────────────────────────────────────────────
+  let liveData: Record<string, unknown> = {};
+  let liveInterval: ReturnType<typeof setInterval> | null = null;
+  let prevPollDate = '';
+
+  async function fetchLive() {
+    try {
+      const res = await fetch(`/api/live?date=${data.date}`);
+      if (res.ok) liveData = await res.json();
+    } catch { /* silent fail */ }
+  }
+
+  function stopPolling() {
+    if (liveInterval) { clearInterval(liveInterval); liveInterval = null; }
+    liveData = {};
+  }
+
+  // Re-evaluate whenever data.date or data.today changes
+  $: if (data.date !== prevPollDate) {
+    stopPolling();
+    prevPollDate = data.date;
+    if (data.date === data.today) {
+      fetchLive();
+      liveInterval = setInterval(fetchLive, 60_000);
+    }
+  }
+
+  onDestroy(stopPolling);
+
+  function getPickLiveStatus(pick: Pick): LivePickStatus | null {
+    const raw = liveData[pick.player.toLowerCase()] as Record<string, unknown> | undefined;
+    if (raw) {
+      const statKey = pick.stat.toLowerCase() as 'pts' | 'reb' | 'ast';
+      return {
+        value: (raw[statKey] as number) ?? 0,
+        gameStatus: raw.gameStatus as 'pre' | 'live' | 'final',
+        period:    raw.period    as number | undefined,
+        clock:     raw.clock     as string | undefined,
+        homeTeam:  raw.homeTeam  as string | undefined,
+        awayTeam:  raw.awayTeam  as string | undefined,
+        homeScore: raw.homeScore as number | undefined,
+        awayScore: raw.awayScore as number | undefined,
+      };
+    }
+    // Pre-game fallback — keyed by team abbr
+    const pre = liveData[`__pre_${pick.team}`] as Record<string, unknown> | undefined;
+    if (pre) {
+      return {
+        value: 0,
+        gameStatus: 'pre',
+        gameTime:  pre.gameTime  as string | undefined,
+        homeTeam:  pre.homeTeam  as string | undefined,
+        awayTeam:  pre.awayTeam  as string | undefined,
+      };
+    }
+    return null;
   }
 
   $: lockPicks = picks
@@ -148,7 +207,7 @@
             </div>
             <div class="locks-grid">
               {#each lockPicks as pick}
-                <PickCard {pick} isLock={true} history={getHistory(pick.player, pick.stat)} />
+                <PickCard {pick} isLock={true} history={getHistory(pick.player, pick.stat)} liveStatus={getPickLiveStatus(pick)} />
               {/each}
             </div>
           </section>
@@ -190,7 +249,7 @@
               </div>
               <div class="other-picks-grid">
                 {#each otherPicks as pick}
-                  <PickCard {pick} isLock={false} history={getHistory(pick.player, pick.stat)} />
+                  <PickCard {pick} isLock={false} history={getHistory(pick.player, pick.stat)} liveStatus={getPickLiveStatus(pick)} />
                 {/each}
               </div>
             </section>

@@ -1,17 +1,30 @@
 <script lang="ts">
-  import type { Pick } from '$lib/types';
-  import { getTeamLogoUrl, getTeamColor, getStatColor, formatOdds } from '$lib/utils';
+  import type { Pick, LivePickStatus } from '$lib/types';
+  import { getTeamLogoUrl, getTeamColor, getStatColor, formatOdds, getBookStyle } from '$lib/utils';
   import ProbabilityRing from './ProbabilityRing.svelte';
   import EdgeBadge from './EdgeBadge.svelte';
 
   export let pick: Pick;
   export let isLock: boolean = false;
   export let history: { attempts: number; hits: number; recent: boolean[] } | undefined = undefined;
+  export let liveStatus: LivePickStatus | null = null;
+
+  function fmtTipoff(iso?: string): string {
+    if (!iso) return 'Upcoming';
+    return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+  }
+
+  $: isHit  = liveStatus?.gameStatus === 'final' && (liveStatus.value ?? 0) >= pick.line;
+  $: isMiss = liveStatus?.gameStatus === 'final' && (liveStatus.value ?? 0) <  pick.line;
 
   $: hitRate = history && history.attempts > 0 ? history.hits / history.attempts : null;
   $: teamColor = getTeamColor(pick.team);
   $: statColor = getStatColor(pick.stat);
   $: logoUrl = getTeamLogoUrl(pick.team);
+  $: bookStyle = getBookStyle(pick.book);
+
+  let logoFailed = false;
+  $: { logoUrl; logoFailed = false; }
 
   // Mini bar chart calculations
   $: maxVal = Math.max(pick.season_avg, pick.last_5_avg, pick.last_3_avg, pick.line) * 1.15;
@@ -23,26 +36,19 @@
 </script>
 
 <div class="pick-card glass" class:is-lock={isLock} style="border-left-color: {teamColor};">
-  {#if isLock}
-    <div class="lock-ribbon">🔒 LOCK</div>
-  {/if}
-
-  {#if pick.has_live_line}
-    <div class="live-badge">
-      <span class="live-dot"></span>
-      LIVE
-    </div>
-  {/if}
-
   <div class="card-header">
     <div class="player-info">
       <div class="team-logo-wrap" style="background: {teamColor}20; border-color: {teamColor}40;">
-        <img
-          src={logoUrl}
-          alt={pick.team}
-          class="team-logo"
-          on:error={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
+        {#if logoUrl && !logoFailed}
+          <img
+            src={logoUrl}
+            alt={pick.team}
+            class="team-logo"
+            on:error={() => { logoFailed = true; }}
+          />
+        {:else}
+          <span class="team-abbr" style="color: {teamColor};">{pick.team}</span>
+        {/if}
       </div>
       <div class="player-details">
         <h3 class="player-name">{pick.player}</h3>
@@ -68,7 +74,7 @@
         <span class="odds-value">{formatOdds(pick.over_odds)}</span>
       </div>
       <div class="book-info">
-        <span class="book-label">{pick.book}</span>
+        <span class="book-label" style="background: {bookStyle.bg}; color: {bookStyle.color}; border-color: {bookStyle.border};">{pick.book}</span>
       </div>
     </div>
 
@@ -134,6 +140,38 @@
         <span class="past-label">No previous data for this prop</span>
       </div>
     {/if}
+
+    {#if liveStatus}
+      <div
+        class="live-strip"
+        class:live-strip--pre={liveStatus.gameStatus === 'pre'}
+        class:live-strip--live={liveStatus.gameStatus === 'live'}
+        class:live-strip--hit={isHit}
+        class:live-strip--miss={isMiss}
+      >
+        {#if liveStatus.gameStatus === 'pre'}
+          <span class="ls-icon">🕐</span>
+          <span class="ls-main">Tipoff {fmtTipoff(liveStatus.gameTime)}</span>
+        {:else if liveStatus.gameStatus === 'live'}
+          <div class="ls-live-dot"></div>
+          <span class="ls-main">
+            <strong>{liveStatus.value} {pick.stat}</strong>
+            <span class="ls-need">/ need {pick.line}</span>
+          </span>
+          <span class="ls-score">
+            {liveStatus.awayTeam} {liveStatus.awayScore} – {liveStatus.homeTeam} {liveStatus.homeScore}
+            <span class="ls-period">Q{liveStatus.period} {liveStatus.clock}</span>
+          </span>
+        {:else}
+          <span class="ls-result-icon">{isHit ? '✓' : '✗'}</span>
+          <span class="ls-main">
+            <strong>{isHit ? 'Hit' : 'Miss'}</strong>
+            — {liveStatus.value} {pick.stat}
+          </span>
+          <span class="ls-final">FINAL</span>
+        {/if}
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -157,52 +195,12 @@
   box-shadow: 0 0 30px rgba(245,158,11,0.1);
 }
 
-.lock-ribbon {
-  position: absolute;
-  top: 10px;
-  right: -22px;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #000;
-  font-size: 9px;
-  font-weight: 900;
-  padding: 3px 28px;
-  transform: rotate(35deg);
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(245,158,11,0.4);
-}
-
-.live-badge {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(239,68,68,0.15);
-  border: 1px solid rgba(239,68,68,0.3);
-  color: #ef4444;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  padding: 2px 8px;
-  border-radius: 12px;
-}
-
-.live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ef4444;
-  animation: live-blink 1.2s infinite;
-}
 
 .card-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 8px;
 }
 
 .player-info {
@@ -229,6 +227,12 @@
   width: 36px;
   height: 36px;
   object-fit: contain;
+}
+
+.team-abbr {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
 
 .player-details {
@@ -502,8 +506,93 @@
   color: var(--text-dim);
 }
 
-@keyframes live-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+/* Live status strip */
+.live-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: 11px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  flex-wrap: wrap;
 }
+
+.live-strip--pre {
+  color: var(--text-dim);
+}
+
+.live-strip--live {
+  background: rgba(239,68,68,0.08);
+  border-color: rgba(239,68,68,0.25);
+  color: var(--text-muted);
+}
+
+.live-strip--hit {
+  background: rgba(34,197,94,0.1);
+  border-color: rgba(34,197,94,0.3);
+  color: #22c55e;
+}
+
+.live-strip--miss {
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.3);
+  color: #ef4444;
+}
+
+.ls-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex-shrink: 0;
+  animation: ls-blink 1.2s infinite;
+}
+
+@keyframes ls-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.ls-icon { font-size: 11px; }
+
+.ls-main {
+  flex: 1;
+  font-weight: 600;
+}
+
+.ls-need {
+  font-weight: 400;
+  color: var(--text-dim);
+  margin-left: 2px;
+}
+
+.ls-score {
+  font-size: 10px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.ls-period {
+  margin-left: 5px;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.ls-result-icon {
+  font-size: 13px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.ls-final {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  opacity: 0.5;
+}
+
 </style>
