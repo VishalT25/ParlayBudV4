@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
+  import { browser } from '$app/environment';
   import type { PageData } from './$types';
   import type { Pick, LivePickStatus } from '$lib/types';
   import { formatDate } from '$lib/utils';
@@ -22,7 +23,6 @@
   // ── Live status polling ────────────────────────────────────────────────────
   let liveData: Record<string, unknown> = {};
   let liveInterval: ReturnType<typeof setInterval> | null = null;
-  let prevPollDate = '';
 
   async function fetchLive() {
     try {
@@ -36,10 +36,10 @@
     liveData = {};
   }
 
-  // Re-evaluate whenever data.date or data.today changes
-  $: if (data.date !== prevPollDate) {
+  // `browser` is false during SSR — this block only runs in the browser.
+  // Reactive on data.date so it re-evaluates when the user navigates between dates.
+  $: if (browser) {
     stopPolling();
-    prevPollDate = data.date;
     if (data.date === data.today) {
       fetchLive();
       liveInterval = setInterval(fetchLive, 60_000);
