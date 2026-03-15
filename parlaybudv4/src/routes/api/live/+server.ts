@@ -60,9 +60,10 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
           if (!statistics) continue;
 
           const names = (statistics.names as string[]) ?? [];
-          const ptsIdx = names.indexOf('pts');
-          const rebIdx = names.indexOf('reb');
-          const astIdx = names.indexOf('ast');
+          // ESPN returns uppercase stat names: 'PTS', 'REB', 'AST'
+          const ptsIdx = names.findIndex(n => n.toUpperCase() === 'PTS');
+          const rebIdx = names.findIndex(n => n.toUpperCase() === 'REB');
+          const astIdx = names.findIndex(n => n.toUpperCase() === 'AST');
 
           const athletes = (statistics.athletes as unknown[]) ?? [];
           for (const ath of athletes) {

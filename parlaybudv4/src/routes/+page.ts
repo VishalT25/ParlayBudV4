@@ -54,6 +54,40 @@ export const load: PageLoad = async ({ fetch, url }) => {
     }
   }
 
+  // For recent days with null results, auto-compute hit rates from ESPN boxscore data
+  const nullResultDays = pastDays
+    .filter(d => !d.results && d.picks?.length > 0)
+    .slice(0, 7); // only bother with last 7 days
+
+  if (nullResultDays.length > 0) {
+    const espnResults = await Promise.all(
+      nullResultDays.map(async (day) => {
+        try {
+          const res = await fetch(`/api/live?date=${day.date}`);
+          if (!res.ok) return null;
+          return { day, liveData: (await res.json()) as Record<string, Record<string, unknown>> };
+        } catch { return null; }
+      })
+    );
+
+    for (const item of espnResults) {
+      if (!item) continue;
+      const { day, liveData } = item;
+      for (const pick of day.picks) {
+        const raw = liveData[pick.player.toLowerCase()];
+        if (!raw || raw.gameStatus !== 'final') continue;
+        const statKey = pick.stat.toLowerCase() as 'pts' | 'reb' | 'ast';
+        const actual = (raw[statKey] as number) ?? 0;
+        const hit = actual >= pick.line;
+        const key = `${pick.player}|${pick.stat}`;
+        if (!legMap[key]) legMap[key] = { attempts: 0, hits: 0, recent: [] };
+        legMap[key].attempts++;
+        if (hit) legMap[key].hits++;
+        legMap[key].recent.unshift(hit);
+      }
+    }
+  }
+
   // Trim recent to last 10 for display
   for (const key of Object.keys(legMap)) {
     legMap[key].recent = legMap[key].recent.slice(0, 10);
