@@ -10,6 +10,8 @@
   let sortDir: 1 | -1 = -1;
   let activeFilter: 'All' | 'PTS' | 'REB' | 'AST' = 'All';
   let expandedPlayer = '';   // player key of the currently expanded row
+  let hideOddsTraps = false;
+  let hideColdPicks = false;
 
   function toggleRow(key: string) {
     expandedPlayer = expandedPlayer === key ? '' : key;
@@ -33,7 +35,13 @@
 
   $: filtered = activeFilter === 'All' ? picks : picks.filter(p => p.stat === activeFilter);
 
-  $: sorted = [...filtered].sort((a, b) => {
+  $: displayPicks = filtered.filter(p => {
+    if (hideOddsTraps && p.warnings?.includes('ODDS_TRAP')) return false;
+    if (hideColdPicks && (p.warnings?.includes('L3_BELOW_LINE') || p.warnings?.includes('L5_BELOW_LINE'))) return false;
+    return true;
+  });
+
+  $: sorted = [...displayPicks].sort((a, b) => {
     const av = a[sortKey];
     const bv = b[sortKey];
     if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * sortDir;
@@ -80,6 +88,22 @@
           {/if}
         </button>
       {/each}
+    </div>
+    <div class="filter-toggles">
+      <button
+        class="filter-toggle"
+        class:active={hideOddsTraps}
+        on:click={() => hideOddsTraps = !hideOddsTraps}
+      >
+        {hideOddsTraps ? '✓' : ''} Hide +200 Traps
+      </button>
+      <button
+        class="filter-toggle"
+        class:active={hideColdPicks}
+        on:click={() => hideColdPicks = !hideColdPicks}
+      >
+        {hideColdPicks ? '✓' : ''} Hide Cold Picks
+      </button>
     </div>
     <div class="table-meta">
       <span class="meta-text">{sorted.length} picks</span>
@@ -140,14 +164,26 @@
             on:click={() => toggleRow(rowKey)}
           >
             <td class="player-cell">
-              <span class="player-name">{pick.player}</span>
-              {#if ls}
-                <span class="row-live-dot"
-                  class:dot-live={ls.gameStatus === 'live'}
-                  class:dot-hit={ls.gameStatus === 'final' && ls.value >= pick.line}
-                  class:dot-miss={ls.gameStatus === 'final' && ls.value < pick.line}
-                ></span>
-              {/if}
+              <div class="player-cell-inner">
+                <span class="player-name">{pick.player}</span>
+                {#if ls}
+                  <span class="row-live-dot"
+                    class:dot-live={ls.gameStatus === 'live'}
+                    class:dot-hit={ls.gameStatus === 'final' && ls.value >= pick.line}
+                    class:dot-miss={ls.gameStatus === 'final' && ls.value < pick.line}
+                  ></span>
+                {/if}
+                {#if pick.warnings && pick.warnings.length > 0}
+                  <div class="table-warnings">
+                    {#each pick.warnings as w}
+                      <span class="table-warn-dot"
+                        title={w === 'ODDS_TRAP' ? '⚠️ +200 Trap' : w === 'L3_BELOW_LINE' ? '⚠️ Cold (L3 below line)' : w === 'L5_BELOW_LINE' ? '📉 Trending Down' : '🔍 Unusual Line'}
+                        style="background: {w === 'ODDS_TRAP' ? '#ef4444' : w === 'UNUSUAL_LINE' ? '#a855f7' : '#f59e0b'}">
+                      </span>
+                    {/each}
+                  </div>
+                {/if}
+              </div>
             </td>
             <td>
               <span class="team-chip" style="color: {statColor}; border-color: {statColor}20; background: {statColor}10;">{pick.team}</span>
@@ -427,4 +463,29 @@ td {
 .detail-result { font-weight: 800; font-size: 13px; }
 .detail-score  { color: var(--text-dim); font-size: 11px; margin-left: auto; }
 .detail-final  { color: var(--text-dim); font-size: 11px; margin-left: auto; }
+
+.filter-toggles {
+  display: flex;
+  gap: 4px;
+}
+.filter-toggle {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.filter-toggle:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+.filter-toggle.active {
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.3);
+  color: #ef4444;
+}
+.player-cell-inner { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.table-warnings { display: flex; gap: 3px; }
+.table-warn-dot { width: 6px; height: 6px; border-radius: 50%; }
 </style>

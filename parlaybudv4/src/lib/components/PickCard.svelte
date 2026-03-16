@@ -26,6 +26,13 @@
   let logoFailed = false;
   $: { logoUrl; logoFailed = false; }
 
+  const WARNING_CONFIG: Record<string, { label: string; color: string; tooltip: string }> = {
+    'ODDS_TRAP':     { label: '⚠️ +200 Trap',      color: '#ef4444', tooltip: 'Odds ≥ +200 historically hit only 33%' },
+    'L3_BELOW_LINE': { label: '⚠️ Cold',            color: '#f59e0b', tooltip: 'Last 3 game avg is below the line' },
+    'L5_BELOW_LINE': { label: '📉 Trending Down',   color: '#f59e0b', tooltip: 'Last 5 game avg is below the line' },
+    'UNUSUAL_LINE':  { label: '🔍 Verify Line',     color: '#a855f7', tooltip: 'Line seems unusually low — may be a live bet' },
+  };
+
   // Mini bar chart calculations
   $: maxVal = Math.max(pick.season_avg, pick.last_5_avg, pick.last_3_avg, pick.line) * 1.15;
   $: bars = [
@@ -113,6 +120,26 @@
         EV: <span style="color: #22c55e;">+{(pick.ev * 100).toFixed(1)}%</span>
       </div>
     </div>
+
+    {#if pick.warnings && pick.warnings.length > 0}
+      <div class="warnings-row">
+        {#each pick.warnings as w}
+          {#if WARNING_CONFIG[w]}
+            <span class="warn-badge" style="color: {WARNING_CONFIG[w].color}; background: {WARNING_CONFIG[w].color}18; border-color: {WARNING_CONFIG[w].color}35;" title={WARNING_CONFIG[w].tooltip}>
+              {WARNING_CONFIG[w].label}
+            </span>
+          {/if}
+        {/each}
+      </div>
+    {/if}
+    {#if isLock && pick.passes_lock_filter && (!pick.warnings || pick.warnings.length === 0)}
+      <div class="verified-row">
+        <span class="verified-badge">✅ ML {(pick.model_prob * 100).toFixed(0)}%+</span>
+        <span class="verified-badge">✅ Odds OK</span>
+        <span class="verified-badge">✅ Recent Form</span>
+        <span class="verified-badge">✅ Season Margin</span>
+      </div>
+    {/if}
 
     {#if history && history.attempts > 0}
       <div class="past-record">
@@ -593,6 +620,36 @@
   font-weight: 800;
   letter-spacing: 0.8px;
   opacity: 0.5;
+}
+
+.warnings-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.warn-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid;
+  cursor: default;
+}
+.verified-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.verified-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(34,197,94,0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34,197,94,0.25);
 }
 
 </style>

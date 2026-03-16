@@ -10,6 +10,16 @@ export interface Injury {
   reason: string;
 }
 
+export interface FilterDetails {
+  odds_ok: boolean;
+  l3_clears_line: boolean;
+  l5_clears_line: boolean;
+  season_margin: number;
+  season_margin_ok: boolean;
+  min_avg_ok: boolean;
+  unusual_line: boolean;
+}
+
 export interface Pick {
   player: string;
   team: string;
@@ -28,6 +38,10 @@ export interface Pick {
   last_3_avg: number;
   is_home: 0 | 1;
   has_live_line: boolean;
+  warnings?: string[];
+  passes_lock_filter?: boolean;
+  passes_parlay_filter?: boolean;
+  filter_details?: FilterDetails;
 }
 
 export interface Parlay {
