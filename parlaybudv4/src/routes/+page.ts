@@ -1,7 +1,8 @@
 import type { PageLoad } from './$types';
 import type { DayPicks } from '$lib/types';
 
-export const load: PageLoad = async ({ fetch, url }) => {
+export const load: PageLoad = async ({ fetch, url, depends }) => {
+  depends('parlaybudlive'); // lets invalidate('parlaybudlive') re-run just this load
   const today = new Date().toISOString().split('T')[0];
   const requestedDate = url.searchParams.get('date') || today;
 
@@ -97,6 +98,13 @@ export const load: PageLoad = async ({ fetch, url }) => {
   const prevDate = new Date(base.getTime() - 86400000).toISOString().split('T')[0];
   const nextDate = new Date(base.getTime() + 86400000).toISOString().split('T')[0];
 
+  // Fetch live pick status for the displayed date (works for today AND past dates)
+  let liveStatus: Record<string, unknown> = {};
+  try {
+    const lr = await fetch(`/api/live?date=${requestedDate}`);
+    if (lr.ok) liveStatus = await lr.json();
+  } catch { /* ESPN unavailable */ }
+
   return {
     picks,
     date: requestedDate,
@@ -105,5 +113,6 @@ export const load: PageLoad = async ({ fetch, url }) => {
     nextDate,
     availableDates: availableDates.sort(),
     legHistory: legMap,
+    liveStatus,
   };
 };

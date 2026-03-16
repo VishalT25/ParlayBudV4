@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
-  import { afterNavigate } from '$app/navigation';
+  import { onMount, onDestroy } from 'svelte';
+  import { invalidate } from '$app/navigation';
   import type { PageData } from './$types';
   import type { Pick, LivePickStatus } from '$lib/types';
   import { formatDate } from '$lib/utils';
@@ -20,30 +20,18 @@
     return legHistory[`${player}|${stat}`];
   }
 
-  // ── Live status polling ────────────────────────────────────────────────────
-  // afterNavigate is browser-only (never runs during SSR) and fires on:
-  //   • initial page load (after hydration completes)
-  //   • every subsequent client-side navigation (e.g. date change)
-  let liveData: Record<string, unknown> = {};
-  let liveInterval: ReturnType<typeof setInterval> | null = null;
+  // ── Live status ────────────────────────────────────────────────────────────
+  // liveStatus is fetched server-side in the load function on every page load.
+  // For today's picks we re-run the load every 60 s via invalidate().
+  $: liveData = data.liveStatus ?? {};
 
-  async function fetchLive() {
-    try {
-      const res = await fetch(`/api/live?date=${data.date}`);
-      if (res.ok) liveData = await res.json();
-    } catch { /* silent fail */ }
-  }
-
-  afterNavigate(() => {
-    if (liveInterval) { clearInterval(liveInterval); liveInterval = null; }
-    liveData = {};
+  let refreshTimer: ReturnType<typeof setInterval> | null = null;
+  onMount(() => {
     if (data.date === data.today) {
-      fetchLive();
-      liveInterval = setInterval(fetchLive, 60_000);
+      refreshTimer = setInterval(() => invalidate('parlaybudlive'), 60_000);
     }
   });
-
-  onDestroy(() => { if (liveInterval) clearInterval(liveInterval); });
+  onDestroy(() => { if (refreshTimer) clearInterval(refreshTimer); });
 
   function getPickLiveStatus(pick: Pick): LivePickStatus | null {
     const raw = liveData[pick.player.toLowerCase()] as Record<string, unknown> | undefined;
