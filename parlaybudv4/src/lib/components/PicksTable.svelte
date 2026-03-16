@@ -3,11 +3,33 @@
   import { formatOdds, formatPct, getStatColor, getEdgeColor } from '$lib/utils';
 
   export let picks: Pick[];
+  export let liveData: Record<string, unknown> = {};
 
   type SortKey = keyof Pick;
   let sortKey: SortKey = 'model_prob';
   let sortDir: 1 | -1 = -1;
   let activeFilter: 'All' | 'PTS' | 'REB' | 'AST' = 'All';
+  let expandedPlayer = '';   // player key of the currently expanded row
+
+  function toggleRow(key: string) {
+    expandedPlayer = expandedPlayer === key ? '' : key;
+  }
+
+  function getRowLive(pick: Pick) {
+    const raw = liveData[pick.player.toLowerCase()] as Record<string, unknown> | undefined;
+    if (!raw) return null;
+    const statKey = pick.stat.toLowerCase() as 'pts' | 'reb' | 'ast';
+    return {
+      value:      (raw[statKey] as number) ?? 0,
+      gameStatus:  raw.gameStatus as string,
+      period:      raw.period    as number | undefined,
+      clock:       raw.clock     as string | undefined,
+      homeTeam:    raw.homeTeam  as string | undefined,
+      awayTeam:    raw.awayTeam  as string | undefined,
+      homeScore:   raw.homeScore as number | undefined,
+      awayScore:   raw.awayScore as number | undefined,
+    };
+  }
 
   $: filtered = activeFilter === 'All' ? picks : picks.filter(p => p.stat === activeFilter);
 
@@ -107,9 +129,25 @@
           {@const probColor = getProbColor(pick.model_prob)}
           {@const edgeColor = getEdgeColor(pick.edge)}
           {@const statColor = getStatColor(pick.stat)}
-          <tr class="table-row" style="animation-delay: {i * 30}ms">
+          {@const rowKey = `${pick.player}|${pick.stat}`}
+          {@const isExpanded = expandedPlayer === rowKey}
+          {@const ls = getRowLive(pick)}
+          <tr
+            class="table-row"
+            class:expanded={isExpanded}
+            class:has-live={!!ls}
+            style="animation-delay: {i * 30}ms"
+            on:click={() => toggleRow(rowKey)}
+          >
             <td class="player-cell">
               <span class="player-name">{pick.player}</span>
+              {#if ls}
+                <span class="row-live-dot"
+                  class:dot-live={ls.gameStatus === 'live'}
+                  class:dot-hit={ls.gameStatus === 'final' && ls.value >= pick.line}
+                  class:dot-miss={ls.gameStatus === 'final' && ls.value < pick.line}
+                ></span>
+              {/if}
             </td>
             <td>
               <span class="team-chip" style="color: {statColor}; border-color: {statColor}20; background: {statColor}10;">{pick.team}</span>
@@ -138,6 +176,35 @@
               <span class="book-badge">{pick.book}</span>
             </td>
           </tr>
+          {#if isExpanded}
+            <tr class="detail-row">
+              <td colspan="12">
+                {#if ls}
+                  <div class="live-detail"
+                    class:live-detail--live={ls.gameStatus === 'live'}
+                    class:live-detail--hit={ls.gameStatus === 'final' && ls.value >= pick.line}
+                    class:live-detail--miss={ls.gameStatus === 'final' && ls.value < pick.line}
+                  >
+                    {#if ls.gameStatus === 'live'}
+                      <span class="detail-dot"></span>
+                      <strong>{ls.value} {pick.stat}</strong>
+                      <span>/ need {pick.line} · {pick.line - ls.value > 0 ? (pick.line - ls.value).toFixed(1) + ' away' : 'OVER ✓'}</span>
+                      <span class="detail-score">{ls.awayTeam} {ls.awayScore} – {ls.homeTeam} {ls.homeScore} &nbsp;·&nbsp; Q{ls.period} {ls.clock}</span>
+                    {:else if ls.gameStatus === 'final'}
+                      <span class="detail-result">{ls.value >= pick.line ? '✓ Hit' : '✗ Miss'}</span>
+                      <strong>{ls.value} {pick.stat}</strong>
+                      <span>/ line was {pick.line}</span>
+                      <span class="detail-final">FINAL · {ls.awayTeam} {ls.awayScore} – {ls.homeTeam} {ls.homeScore}</span>
+                    {:else}
+                      <span>No live data available yet</span>
+                    {/if}
+                  </div>
+                {:else}
+                  <div class="live-detail">No live data available for this pick yet.</div>
+                {/if}
+              </td>
+            </tr>
+          {/if}
         {/each}
       </tbody>
     </table>
@@ -317,4 +384,47 @@ td {
   border-radius: 4px;
   border: 1px solid rgba(255,255,255,0.06);
 }
+
+/* Clickable rows */
+.table-row { cursor: default; }
+.table-row.has-live { cursor: pointer; }
+.table-row.has-live:hover { background: rgba(255,255,255,0.05); }
+.table-row.expanded { background: rgba(255,255,255,0.04); }
+
+/* Live dot in player cell */
+.player-cell { display: flex; align-items: center; gap: 6px; }
+.row-live-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.dot-live  { background: #ef4444; animation: tbl-blink 1.2s infinite; }
+.dot-hit   { background: #22c55e; }
+.dot-miss  { background: #ef4444; opacity: 0.7; }
+@keyframes tbl-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+/* Expanded detail row */
+.detail-row td { padding: 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+
+.live-detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(0,0,0,0.2);
+  flex-wrap: wrap;
+}
+.live-detail--live  { color: #ef4444; }
+.live-detail--hit   { color: #22c55e; }
+.live-detail--miss  { color: #ef4444; }
+
+.detail-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #ef4444; flex-shrink: 0;
+  animation: tbl-blink 1.2s infinite;
+}
+.detail-result { font-weight: 800; font-size: 13px; }
+.detail-score  { color: var(--text-dim); font-size: 11px; margin-left: auto; }
+.detail-final  { color: var(--text-dim); font-size: 11px; margin-left: auto; }
 </style>

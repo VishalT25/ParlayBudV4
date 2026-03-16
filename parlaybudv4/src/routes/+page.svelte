@@ -21,9 +21,14 @@
   }
 
   // ── Live status ────────────────────────────────────────────────────────────
-  // liveStatus is fetched server-side in the load function on every page load.
-  // For today's picks we re-run the load every 60 s via invalidate().
-  $: liveData = data.liveStatus ?? {};
+  $: liveData = (data.liveStatus ?? {}) as Record<string, unknown>;
+
+  let refreshing = false;
+  async function refresh() {
+    refreshing = true;
+    await invalidate('parlaybudlive');
+    refreshing = false;
+  }
 
   let refreshTimer: ReturnType<typeof setInterval> | null = null;
   onMount(() => {
@@ -129,6 +134,10 @@
                 <span class="meta-icon">🕐</span>
                 Generated {new Date(picks.generated_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
               </span>
+              <button class="refresh-btn" on:click={refresh} disabled={refreshing} title="Refresh live scores">
+                <span class="refresh-icon" class:spinning={refreshing}>↻</span>
+                {refreshing ? 'Updating…' : 'Refresh'}
+              </button>
             </div>
           </div>
           <div class="header-games">
@@ -206,8 +215,8 @@
               </div>
             </div>
             <div class="parlays-grid">
-              <ParlayCard parlay={picks.parlay_3leg} type="3-Leg Safe" picks={picks.picks} />
-              <ParlayCard parlay={picks.parlay_5leg} type="5-Leg Premium" picks={picks.picks} />
+              <ParlayCard parlay={picks.parlay_3leg} type="3-Leg Safe" picks={picks.picks} {liveData} />
+              <ParlayCard parlay={picks.parlay_5leg} type="5-Leg Premium" picks={picks.picks} {liveData} />
             </div>
           </section>
 
@@ -219,7 +228,7 @@
                 <h2 class="section-title">All Picks</h2>
               </div>
             </div>
-            <PicksTable picks={picks.picks} />
+            <PicksTable picks={picks.picks} {liveData} />
           </section>
 
           <!-- Other Picks -->
@@ -439,6 +448,26 @@
 }
 
 .meta-icon { font-size: 0.8rem; }
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.25);
+  border-radius: 6px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.refresh-btn:hover { background: rgba(59,130,246,0.18); }
+.refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.refresh-icon { font-size: 14px; display: inline-block; }
+.refresh-icon.spinning { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .header-games {
   text-align: right;

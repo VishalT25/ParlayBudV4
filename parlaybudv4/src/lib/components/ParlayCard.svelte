@@ -5,16 +5,33 @@
   export let parlay: Parlay;
   export let type: '3-Leg Safe' | '5-Leg Premium';
   export let picks: Pick[];
+  export let liveData: Record<string, unknown> = {};
 
   $: is3Leg = type === '3-Leg Safe';
   $: accentColor = is3Leg ? '#22c55e' : '#f59e0b';
   $: n = parlay.legs.length;
-  // Payout multiplier using -110 odds per leg: (1.909)^n
   $: payoutMultiplier = Math.pow(1.909, n);
   $: combinedPct = Math.round(parlay.combined_prob * 100);
 
   function getPickForPlayer(playerName: string): Pick | undefined {
     return picks.find(p => p.player === playerName);
+  }
+
+  function getLegLive(pick: Pick | undefined) {
+    if (!pick) return null;
+    const raw = liveData[pick.player.toLowerCase()] as Record<string, unknown> | undefined;
+    if (!raw) return null;
+    const statKey = pick.stat.toLowerCase() as 'pts' | 'reb' | 'ast';
+    return {
+      value:     (raw[statKey] as number) ?? 0,
+      gameStatus: raw.gameStatus as string,
+      period:    raw.period    as number | undefined,
+      clock:     raw.clock     as string | undefined,
+      homeTeam:  raw.homeTeam  as string | undefined,
+      awayTeam:  raw.awayTeam  as string | undefined,
+      homeScore: raw.homeScore as number | undefined,
+      awayScore: raw.awayScore as number | undefined,
+    };
   }
 </script>
 
@@ -56,6 +73,25 @@
               <span class="leg-prob" style="color: {accentColor};">{Math.round(playerPick.model_prob * 100)}%</span>
             {/if}
           </div>
+          {#if playerPick}
+            {@const ls = getLegLive(playerPick)}
+            {#if ls}
+              <div class="leg-live"
+                class:leg-live--live={ls.gameStatus === 'live'}
+                class:leg-live--hit={ls.gameStatus === 'final' && ls.value >= playerPick.line}
+                class:leg-live--miss={ls.gameStatus === 'final' && ls.value < playerPick.line}
+              >
+                {#if ls.gameStatus === 'live'}
+                  <span class="leg-live-dot"></span>
+                  <span>{ls.value} {playerPick.stat} / need {playerPick.line}</span>
+                  <span class="leg-live-score">{ls.awayTeam} {ls.awayScore}–{ls.homeTeam} {ls.homeScore} · Q{ls.period} {ls.clock}</span>
+                {:else if ls.gameStatus === 'final'}
+                  <span>{ls.value >= playerPick.line ? '✓ Hit' : '✗ Miss'} — {ls.value} {playerPick.stat}</span>
+                  <span class="leg-live-final">FINAL</span>
+                {/if}
+              </div>
+            {/if}
+          {/if}
         </div>
       </div>
     {/each}
@@ -224,6 +260,33 @@
   margin-left: auto;
   font-variant-numeric: tabular-nums;
 }
+
+.leg-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  flex-wrap: wrap;
+}
+.leg-live--live { color: #ef4444; }
+.leg-live--hit  { color: #22c55e; }
+.leg-live--miss { color: #ef4444; }
+
+.leg-live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex-shrink: 0;
+  animation: leg-blink 1.2s infinite;
+}
+@keyframes leg-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.leg-live-score { color: var(--text-dim); font-weight: 400; }
+.leg-live-final { opacity: 0.5; font-size: 9px; letter-spacing: 0.5px; margin-left: auto; }
 
 .parlay-footer {
   display: flex;
