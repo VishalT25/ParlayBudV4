@@ -15,7 +15,7 @@ Usage:
 """
 
 import os, sys, re, json, math, pickle, sqlite3, argparse, logging, time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
@@ -40,7 +40,7 @@ except ImportError:
 # ============================================================
 
 # ⬇️ FLIP THIS TO True TO FETCH LIVE SPORTSBOOK ODDS ⬇️
-FETCH_ODDS = True   # True = pull live lines from Odds API
+FETCH_ODDS = False   # True = pull live lines from Odds API
                      # False = preview mode (ML probabilities only)
 
 DB_PATH = "parlay_ml.db"
@@ -91,10 +91,6 @@ class Pick:
     is_b2b: int
     days_rest: float
     has_live_line: bool
-    warnings: List[str] = field(default_factory=list)
-    passes_lock_filter: bool = True
-    passes_parlay_filter: bool = True
-    filter_details: dict = field(default_factory=dict)
 
 
 # ============================================================
@@ -449,79 +445,117 @@ def generate_picks(features_df, models, live_odds, injuries, tonight_players, mi
 
 
 # ============================================================
-# SAFETY FILTERS
+# POST-ML SAFETY FILTERS (learned from real betting results)
 # ============================================================
 
-def apply_safety_filters(picks: List['Pick'], has_live: bool) -> dict:
-    """
-    Apply battle-tested post-ML safety filters.
-    Adds warning flags to all picks and computes filtered locks/parlays.
-    """
-    MIN_AVG    = {"PTS": 15.0, "REB": 5.0, "AST": 3.0}
-    MIN_MARGIN = {"PTS": 3.5,  "REB": 1.5, "AST": 1.5}
+# Confidence caps per stat — the model is overconfident on REB/AST
+# REB calibration showed predicted 80% → actual 77%, breaks above that
+# Reed Sheppard 0 REB (model said 90.5%), Yabusele 0 REB (model said 90%)
+PROB_CAP = {
+    "PTS": 0.90,   # PTS model is best calibrated
+    "REB": 0.78,   # REB model breaks above ~78%
+    "AST": 0.80,   # AST model slightly overconfident at top
+}
 
+def apply_probability_corrections(picks: List[Pick]) -> List[Pick]:
+    """
+    Fix #1: Cap model probabilities per stat type.
+    Fix #2: If last_3_avg < line, hard cap probability at 60%.
+    Fix #3: If last_5_avg < line, reduce probability by 10%.
+    
+    These corrections address the model being trained on estimated lines
+    (season_avg - offset) rather than real sportsbook lines.
+    """
+    corrected = []
     for p in picks:
-        p.warnings = []
+        prob = p.model_prob
 
-        # Filter 1: Odds cap (+200 trap)
-        odds_ok = not (has_live and p.over_odds >= 200)
-        if not odds_ok:
-            p.warnings.append("ODDS_TRAP")
+        # FIX 1: Hard cap per stat type
+        cap = PROB_CAP.get(p.stat, 0.85)
+        prob = min(prob, cap)
 
-        # Filter 2: Recent form — exception: line < 5.0 allows l3 within 0.5
-        low_line    = p.line < 5.0
-        l3_threshold = p.line - 0.5 if low_line else p.line
-        l3_clears   = p.last_3_avg >= l3_threshold
-        l5_clears   = p.last_5_avg >= p.line
-        if not l3_clears:
-            p.warnings.append("L3_BELOW_LINE")
-        if not l5_clears and l3_clears:   # only add L5 warning if L3 is ok
-            p.warnings.append("L5_BELOW_LINE")
+        # FIX 2: Last 3 games don't clear the line → hard cap at 60%
+        # Evidence: every miss across Feb 19-23 had L3 below line
+        # Mar 16: Reed Sheppard L3=4.3 on 2.5 line → hit. 
+        #         Yabusele L3=7.7 on 3.5 line → 0 REB (outlier, but L3 was fine)
+        #         OG Anunoby L3=2.7 on 1.5 → miss (1 AST, L3 barely above)
+        if p.last_3_avg < p.line:
+            prob = min(prob, 0.58)  # below our min_prob threshold = effectively filtered
 
-        # Filter 7: Unusual line (line set suspiciously far below averages)
-        margin  = p.season_avg - p.line
-        unusual = (p.stat == "PTS" and margin > 10) or \
-                  (p.stat == "REB" and margin > 5)  or \
-                  (p.stat == "AST" and margin > 4)
-        if unusual:
-            p.warnings.append("UNUSUAL_LINE")
+        # FIX 3: Last 5 below line → reduce by 10 percentage points
+        if p.last_5_avg < p.line and p.last_3_avg >= p.line:
+            prob = prob * 0.90  # 10% haircut
 
-        # Filter 3: Season margin
-        min_margin     = MIN_MARGIN.get(p.stat, 1.5)
-        season_margin_ok = margin >= min_margin
+        # FIX 4: Huge gap between season avg and line = suspicious
+        # (live bet or book knows something)
+        margin = (p.season_avg or 0) - p.line
+        if p.stat == "PTS" and margin > 12:
+            prob = min(prob, 0.70)  # SGA 31.7 avg on 18.5 line = sus
+        if p.stat == "REB" and margin > 5:
+            prob = min(prob, 0.70)
+        if p.stat == "AST" and margin > 4:
+            prob = min(prob, 0.70)
 
-        # Filter 6: Star/starter minimum average
-        min_avg    = MIN_AVG.get(p.stat, 5.0)
-        min_avg_ok = p.season_avg >= min_avg
+        # Recalculate edge and EV with corrected probability
+        edge = prob - p.implied_prob
+        dec_odds = 1.0 / p.implied_prob if p.implied_prob > 0 else 1.0
+        ev = prob * dec_odds - 1.0
 
-        # Passes lock filter: ALL checks must pass
-        p.passes_lock_filter = bool(
-            odds_ok and l3_clears and not unusual and
-            p.model_prob >= 0.65 and
-            season_margin_ok and min_avg_ok
-        )
+        corrected.append(Pick(
+            player=p.player, team=p.team, opponent=p.opponent,
+            game=p.game, stat=p.stat, line=p.line,
+            over_odds=p.over_odds, book=p.book,
+            model_prob=prob, implied_prob=p.implied_prob,
+            edge=edge, ev=ev,
+            season_avg=p.season_avg, last_5_avg=p.last_5_avg,
+            last_3_avg=p.last_3_avg, is_home=p.is_home,
+            is_b2b=p.is_b2b, days_rest=p.days_rest,
+            has_live_line=p.has_live_line,
+        ))
 
-        # Passes parlay filter: relaxed (no min avg, no margin check)
-        p.passes_parlay_filter = bool(
-            odds_ok and l3_clears and p.model_prob >= 0.65
-        )
+    corrected.sort(key=lambda p: p.model_prob, reverse=True)
+    return corrected
 
-        p.filter_details = {
-            "odds_ok":         odds_ok,
-            "l3_clears_line":  l3_clears,
-            "l5_clears_line":  l5_clears,
-            "season_margin":   round(float(margin), 2),
-            "season_margin_ok": season_margin_ok,
-            "min_avg_ok":      min_avg_ok,
-            "unusual_line":    unusual,
-        }
 
-    # Build filtered locks (max 6, unique player + game)
-    locks, lock_players, lock_games = [], set(), set()
-    for p in picks:                         # already sorted by prob desc
-        if not p.passes_lock_filter:
-            continue
+def apply_safety_filters(picks: List[Pick], has_live: bool) -> dict:
+    """
+    Apply v3.1 battle-tested filters on top of ML + probability corrections.
+    
+    Returns dict with filtered locks, parlays, and flagged all-picks.
+    
+    Filters (calibrated from Feb 19-23 real results):
+    1. Odds >= +200 → exclude from locks/parlays (33% hit rate)
+    2. Last 3 avg must clear line (every miss had L3 below)
+    3. Season margin >= 3.5 for PTS, >= 1.5 for REB/AST
+    4. No role players in locks (min avgs enforced)
+    5. Max 1 pick per game in parlays
+    6. No duplicate players across parlays
+    """
+
+    # ── Build locks ──
+    min_avg = {"PTS": 15.0, "REB": 5.0, "AST": 3.0}
+    min_margin = {"PTS": 3.5, "REB": 1.5, "AST": 1.5}
+
+    locks = []
+    lock_players = set()
+    lock_games = set()
+    for p in picks:
         if p.player in lock_players or p.game in lock_games:
+            continue
+        if p.model_prob < 0.65:
+            continue
+        # Odds filter
+        if has_live and p.over_odds >= 200:
+            continue
+        # Recent form must clear line
+        if p.last_3_avg < p.line:
+            continue
+        # Season margin
+        margin = (p.season_avg or 0) - p.line
+        if margin < min_margin.get(p.stat, 1.5):
+            continue
+        # No role players
+        if (p.season_avg or 0) < min_avg.get(p.stat, 5.0):
             continue
         locks.append(p)
         lock_players.add(p.player)
@@ -529,22 +563,51 @@ def apply_safety_filters(picks: List['Pick'], has_live: bool) -> dict:
         if len(locks) >= 6:
             break
 
-    # Build parlay pool (unique player + game)
-    parlay_pool, p_players, p_games = [], set(), set()
+    # ── Build 3-leg parlay ──
+    p3 = []
+    p3_players = set()
+    p3_games = set()
     for p in picks:
-        if not p.passes_parlay_filter:
+        if p.player in p3_players or p.game in p3_games:
             continue
-        if p.player in p_players or p.game in p_games:
+        if p.model_prob < 0.65:
             continue
-        parlay_pool.append(p)
-        p_players.add(p.player)
-        p_games.add(p.game)
+        if has_live and p.over_odds >= 200:
+            continue
+        if p.last_3_avg < p.line:
+            continue
+        if (p.season_avg or 0) - p.line < 1.0:
+            continue
+        p3.append(p)
+        p3_players.add(p.player)
+        p3_games.add(p.game)
+        if len(p3) >= 3:
+            break
+
+    # ── Build 5-leg parlay ──
+    p5 = []
+    p5_players = set()
+    p5_games = set()
+    for p in picks:
+        if p.player in p5_players or p.game in p5_games:
+            continue
+        if p.model_prob < 0.62:
+            continue
+        if has_live and p.over_odds >= 200:
+            continue
+        if p.last_3_avg < p.line:
+            continue
+        p5.append(p)
+        p5_players.add(p.player)
+        p5_games.add(p.game)
+        if len(p5) >= 5:
+            break
 
     return {
-        "all_picks":  picks,
-        "locks":      locks,
-        "parlay_3":   parlay_pool[:3],
-        "parlay_5":   parlay_pool[:5],
+        "all_picks": picks,
+        "locks": locks,
+        "parlay_3": p3,
+        "parlay_5": p5,
     }
 
 
@@ -552,15 +615,20 @@ def apply_safety_filters(picks: List['Pick'], has_live: bool) -> dict:
 # OUTPUT
 # ============================================================
 
-def print_results(picks, injuries, has_live, min_prob):
+def print_results(filtered, injuries, has_live, min_prob):
+    picks = filtered['all_picks']
+    locks = filtered['locks']
+    p3 = filtered['parlay_3']
+    p5 = filtered['parlay_5']
+
     print(f"\n{'='*W}")
     mode = "LIVE ODDS" if has_live else "PREVIEW (no live odds)"
-    print(f"  🏀 PARLAY ENGINE V4 — ML MODEL ({mode})")
+    print(f"  🏀 PARLAY ENGINE V4.1 — ML + SAFETY FILTERS ({mode})")
     print(f"  📅 {datetime.now().strftime('%A, %B %d, %Y')}")
-    print(f"  🧠 Model: XGBoost (trained on 23K+ games, 132 features)")
-    print(f"  📏 Min P(over): {min_prob:.0%}")
+    print(f"  🧠 XGBoost (23K+ games) + v3.1 battle-tested filters")
+    print(f"  📏 Min P(over): {min_prob:.0%} | Prob caps: PTS {PROB_CAP['PTS']:.0%}, REB {PROB_CAP['REB']:.0%}, AST {PROB_CAP['AST']:.0%}")
     if has_live:
-        print(f"  📏 Min edge: {MIN_EDGE:.0%}")
+        print(f"  📏 Min edge: {MIN_EDGE:.0%} | Odds cap: +200 | L3 must clear line")
     print(f"{'='*W}")
 
     # Injuries
@@ -595,15 +663,12 @@ def print_results(picks, injuries, has_live, min_prob):
         print(f"{i:>3}. {p.player:<24} {p.stat:<4} {p.line:>6.1f} {p.model_prob:>7.1%} "
               f"{p.last_5_avg:>6.1f} {p.last_3_avg:>6.1f} {p.opponent:>5} {edge_str:>7} {bk:<12}")
 
-    # ── LOCKS ──
-    filtered = apply_safety_filters(ev_picks, has_live)
-    locks = filtered["locks"]
-    parlay_pool = filtered["parlay_3"] + [p for p in filtered["parlay_5"] if p not in filtered["parlay_3"]]
-
+    # ── LOCKS (pre-filtered by apply_safety_filters) ──
     if locks:
         print(f"\n{'='*W}")
-        lbl = "LOCKS (ML + live lines)" if has_live else "PREVIEW LOCKS (verify lines on DraftKings)"
+        lbl = "LOCKS (ML + safety filters)" if has_live else "PREVIEW LOCKS"
         print(f"  🔒 {lbl}")
+        print(f"  Filters: L3 > line ✓ | Season margin ✓ | Odds < +200 ✓ | Stars only ✓")
         print(f"{'='*W}")
         for i, p in enumerate(locks, 1):
             odds_str = f"({p.over_odds:+d})" if p.has_live_line and p.over_odds != -110 else ""
@@ -612,161 +677,58 @@ def print_results(picks, injuries, has_live, min_prob):
             if p.has_live_line:
                 print(f"     Edge: {p.edge:+.1%} | EV: {p.ev:+.1%} | {p.book}")
             print(f"     vs {p.opponent} | {'Home' if p.is_home else 'Away'} | {p.game}")
+    else:
+        print(f"\n  ⚠️  No picks passed all safety filters for locks")
 
     # ── 3-LEG SAFE PARLAY ──
-    if len(parlay_pool) >= 3:
-        p3 = parlay_pool[:3]
+    if len(p3) >= 3:
         combo_prob = 1.0
         for p in p3:
             combo_prob *= p.model_prob
 
         print(f"\n{'='*W}")
-        print(f"  🎯 3-LEG SAFE PARLAY")
+        print(f"  🎯 3-LEG SAFE PARLAY (all filters passed)")
         print(f"  Combined P(hit): {combo_prob:.1%}")
         print(f"{'='*W}")
         for i, p in enumerate(p3, 1):
             print(f"\n  {i}. {p.player} ({p.team}) — Over {p.line:.1f} {p.stat}")
-            print(f"     ML: {p.model_prob:.1%} | Avg5: {p.last_5_avg:.1f} | vs {p.opponent} | {p.game}")
+            print(f"     ML: {p.model_prob:.1%} | L3: {p.last_3_avg:.1f} | L5: {p.last_5_avg:.1f} | vs {p.opponent}")
+    else:
+        print(f"\n  ⚠️  Not enough picks passed filters for 3-leg parlay")
 
-    if len(parlay_pool) >= 5:
-        p5 = parlay_pool[:5]
+    # ── 5-LEG PREMIUM PARLAY ──
+    if len(p5) >= 5:
         combo_prob = 1.0
         for p in p5:
             combo_prob *= p.model_prob
 
         print(f"\n{'='*W}")
-        print(f"  🔥 5-LEG PREMIUM PARLAY")
+        print(f"  🔥 5-LEG PREMIUM PARLAY (all filters passed)")
         print(f"  Combined P(hit): {combo_prob:.1%}")
         print(f"{'='*W}")
         for i, p in enumerate(p5, 1):
             print(f"\n  {i}. {p.player} ({p.team}) — Over {p.line:.1f} {p.stat}")
-            print(f"     ML: {p.model_prob:.1%} | Avg5: {p.last_5_avg:.1f} | vs {p.opponent} | {p.game}")
+            print(f"     ML: {p.model_prob:.1%} | L3: {p.last_3_avg:.1f} | L5: {p.last_5_avg:.1f} | vs {p.opponent}")
 
     # Methodology
     print(f"\n{'='*W}")
-    print("  ℹ️  V4 METHODOLOGY")
+    print("  ℹ️  V4.1 METHODOLOGY")
     print(f"{'='*W}")
     print(f"""
-  • Model: XGBoost trained on {23415} games (2023-25), validated on 2025-26
-  • Features: 132 (rolling avgs, opponent defense, usage, interactions, rest)
-  • P(over) = model.predict_proba() — NOT Normal CDF
-  • Calibration: predicted 70% → actual 73% (verified on 2,568 picks)
-  • Edge = P(over) - implied_prob from sportsbook
-  • PTS/REB/AST only (STL/BLK models unreliable — excluded)
-  • Season margin >= 3.5 required for locks
-  • Max 1 pick per game (correlation protection)
-  • Odds >= +200 excluded when live lines available
+  • XGBoost trained on 23K+ games (2023-25), validated on 2025-26
+  • 132 features: rolling avgs, opponent defense, usage, interactions, rest
+  • Post-ML corrections applied:
+    - Probability caps: PTS {PROB_CAP['PTS']:.0%}, REB {PROB_CAP['REB']:.0%}, AST {PROB_CAP['AST']:.0%}
+    - L3 avg < line → capped at 58% (effectively filtered)
+    - L5 avg < line → 10% probability haircut
+    - Unusual line gap → capped at 70%
+  • Safety filters (from Feb 19-23 real results):
+    - Odds >= +200 excluded from locks/parlays
+    - Season margin >= 3.5 (PTS), >= 1.5 (REB/AST) for locks
+    - Min season avg: 15 PTS, 5 REB, 3 AST for locks (no role players)
+    - Max 1 pick per game (correlation protection)
+    - L3 avg must clear line for all locks/parlay legs
 """)
-
-
-# ============================================================
-# JSON EXPORT (for SvelteKit dashboard)
-# ============================================================
-
-def export_json(picks, injuries, games, has_live, models, args, min_prob):
-    """Export picks in the dashboard JSON schema to parlaybudv4/static/picks/."""
-    from datetime import timezone
-
-    today = datetime.now().strftime("%Y-%m-%d")
-
-    if args.json_output == 'auto':
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        out_path = os.path.join(script_dir, 'parlaybudv4', 'static', 'picks', f'{today}.json')
-    else:
-        out_path = args.json_output
-
-    os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
-
-    # Mirror print_results logic to compute ev_picks
-    if has_live:
-        ev_picks = [p for p in picks if p.edge >= MIN_EDGE and p.has_live_line]
-    else:
-        ev_picks = [p for p in picks if p.model_prob >= min_prob]
-
-    # Apply safety filters to get warnings, flags, filtered locks + parlays
-    filtered = apply_safety_filters(ev_picks, has_live)
-    lock_picks   = filtered["locks"]
-    lock_names   = [p.player for p in lock_picks]
-    parlay_pool  = filtered["parlay_3"] + [p for p in filtered["parlay_5"] if p not in filtered["parlay_3"]]
-
-    def make_parlay(legs_list, n):
-        if len(legs_list) < n:
-            return {"legs": [], "combined_prob": 0.0, "players": []}
-        legs = legs_list[:n]
-        combined_prob = 1.0
-        for lp in legs:
-            combined_prob *= lp.model_prob
-        return {
-            "legs": [f"{lp.player} {lp.stat} O{lp.line}" for lp in legs],
-            "combined_prob": round(combined_prob, 4),
-            "players": [lp.player for lp in legs],
-        }
-
-    # Model stats from loaded model metadata
-    model_stats = {}
-    for stat, data in models.items():
-        m = data.get('metrics', {})
-        model_stats[stat] = {
-            "auc": round(float(m.get('roc_auc', 0)), 3),
-            "hit_rate_70": round(float(m.get('hit_rate_70', 0)), 3),
-        }
-
-    output = {
-        "date": today,
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "model_version": "v4-xgboost",
-        "games": [
-            {"away": away, "home": home, "label": label}
-            for label, (away, home) in games.items()
-        ],
-        "injuries": [
-            {"player": name, "status": status, "reason": ""}
-            for name, status in injuries.items()
-        ],
-        "picks": [
-            {
-                "player": p.player,
-                "team": p.team,
-                "opponent": p.opponent,
-                "game": p.game,
-                "stat": p.stat,
-                "line": p.line,
-                "over_odds": p.over_odds,
-                "book": p.book,
-                "model_prob": round(p.model_prob, 4),
-                "implied_prob": round(p.implied_prob, 4),
-                "edge": round(p.edge, 4),
-                "ev": round(p.ev, 4),
-                "season_avg": round(p.season_avg, 1),
-                "last_5_avg": round(p.last_5_avg, 1),
-                "last_3_avg": round(p.last_3_avg, 1),
-                "is_home": p.is_home,
-                "has_live_line": p.has_live_line,
-                "warnings": p.warnings,
-                "passes_lock_filter": p.passes_lock_filter,
-                "passes_parlay_filter": p.passes_parlay_filter,
-                "filter_details": p.filter_details,
-            }
-            for p in ev_picks[:30]
-        ],
-        "locks": lock_names,
-        "parlay_3leg": make_parlay(filtered["parlay_3"], 3),
-        "parlay_5leg": make_parlay(filtered["parlay_5"], 5),
-        "model_stats": model_stats,
-        "results": None,
-    }
-
-    class _Encoder(json.JSONEncoder):
-        def default(self, obj):
-            if hasattr(obj, 'item'):   # numpy scalar (float32, int64, etc.)
-                return obj.item()
-            return super().default(obj)
-
-    with open(out_path, 'w') as f:
-        json.dump(output, f, indent=2, cls=_Encoder)
-
-    print(f"\n✅ JSON exported → {out_path}")
-    return out_path
 
 
 # ============================================================
@@ -781,10 +743,6 @@ def main():
     parser.add_argument('--models', default=MODELS_DIR)
     parser.add_argument('--season', default=SEASON)
     parser.add_argument('--odds-key', default=ODDS_API_KEY)
-    parser.add_argument('--json-output', nargs='?', const='auto', default=None,
-                        metavar='PATH',
-                        help='Export picks to JSON. Omit PATH to use default: '
-                             'parlaybudv4/static/picks/YYYY-MM-DD.json')
     args = parser.parse_args()
 
     print("=" * W)
@@ -869,14 +827,22 @@ def main():
     print("\n🎯 Generating picks...")
     picks = generate_picks(features_df, models, live_odds, injuries,
                            tonight_players, args.min_prob)
-    print(f"   ✅ {len(picks)} picks generated")
+    print(f"   ✅ {len(picks)} raw picks generated")
+
+    # Apply post-ML corrections (probability caps, L3 override, suspicious line detection)
+    print("\n🔧 Applying probability corrections...")
+    picks = apply_probability_corrections(picks)
+    # Re-filter to min_prob after corrections (some will drop below threshold)
+    picks = [p for p in picks if p.model_prob >= args.min_prob]
+    print(f"   ✅ {len(picks)} picks after corrections")
+
+    # Apply safety filters (odds cap, margin checks, no role players, etc.)
+    print("🛡️  Applying safety filters...")
+    filtered = apply_safety_filters(picks, has_live)
+    print(f"   ✅ {len(filtered['locks'])} locks, {len(filtered['parlay_3'])}-leg parlay, {len(filtered['parlay_5'])}-leg parlay")
 
     # Print results
-    print_results(picks, injuries, has_live, args.min_prob)
-
-    # Export JSON for dashboard
-    if args.json_output is not None:
-        export_json(picks, injuries, games, has_live, models, args, args.min_prob)
+    print_results(filtered, injuries, has_live, args.min_prob)
 
 
 if __name__ == "__main__":
