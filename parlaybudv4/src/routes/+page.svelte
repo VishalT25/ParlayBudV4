@@ -139,6 +139,29 @@
                 {refreshing ? 'Updating…' : 'Refresh'}
               </button>
             </div>
+            {#if picks.results}
+              {@const r = picks.results}
+              {@const hitPct = Math.round(r.hit_rate * 100)}
+              <div class="hit-rate-row">
+                <div class="hit-rate-counts">
+                  <span class="hit-num hit">{r.picks_hit}</span>
+                  <span class="hit-sep">/</span>
+                  <span class="hit-num total">{r.picks_total}</span>
+                  <span class="hit-label">picks hit</span>
+                  <span class="hit-pct" style="color: {hitPct >= 65 ? '#22c55e' : hitPct >= 50 ? '#f59e0b' : '#ef4444'};">{hitPct}%</span>
+                </div>
+                <div class="hit-bar-wrap">
+                  <div class="hit-bar-bg">
+                    <div class="hit-bar-fill" style="width: {hitPct}%; background: {hitPct >= 65 ? '#22c55e' : hitPct >= 50 ? '#f59e0b' : '#ef4444'};"></div>
+                  </div>
+                </div>
+                {#if r.locks_total > 0}
+                  <div class="locks-hit-chip">
+                    🔒 Locks: {r.locks_hit}/{r.locks_total}
+                  </div>
+                {/if}
+              </div>
+            {/if}
           </div>
           <div class="header-games">
             <div class="games-label">Games Tonight</div>
@@ -468,6 +491,70 @@
 .refresh-icon { font-size: 14px; display: inline-block; }
 .refresh-icon.spinning { animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* Hit Rate Row */
+.hit-rate-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.hit-rate-counts {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.hit-num {
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: 'Orbitron', sans-serif;
+}
+.hit-num.hit { color: var(--text); }
+.hit-num.total { color: var(--text-muted); }
+.hit-sep { color: var(--text-dim); font-weight: 400; }
+.hit-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-left: 2px;
+}
+.hit-pct {
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: 'Orbitron', sans-serif;
+  margin-left: 4px;
+}
+
+.hit-bar-wrap {
+  flex: 1;
+  min-width: 80px;
+  max-width: 160px;
+}
+
+.hit-bar-bg {
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.hit-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+.locks-hit-chip {
+  font-size: 11px;
+  font-weight: 600;
+  color: #f59e0b;
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
 
 .header-games {
   text-align: right;
