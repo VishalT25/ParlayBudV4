@@ -30,9 +30,10 @@ echo ""
 echo "🚀 Step 4/4 — Pushing to GitHub..."
 cd "$SCRIPT_DIR"
 git add parlaybudv4/static/picks/
-git diff --cached --quiet && echo "No changes to push" && exit 0
 git commit -m "picks: $TODAY"
 git push
 
 echo ""
-echo "✅ Done!"
+echo "✅ Done! Dashboard updating on Vercel now (~30 sec)."
+echo "   JSON: $JSON_PATH"
+echo ""
