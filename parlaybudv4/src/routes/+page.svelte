@@ -81,6 +81,28 @@
 
   $: minProb = picks ? Math.min(...picks.picks.map((p: Pick) => p.model_prob)) : 0;
   $: maxProb = picks ? Math.max(...picks.picks.map((p: Pick) => p.model_prob)) : 0;
+
+  // Compute hit rate from liveData when JSON results are absent
+  $: computedResults = (() => {
+    if (!picks) return null;
+    if (picks.results) return picks.results;
+    // Derive from ESPN final data
+    let total = 0, hit = 0, locksTotal = 0, locksHit = 0;
+    for (const p of picks.picks) {
+      const raw = liveData[p.player.toLowerCase()] as Record<string, unknown> | undefined;
+      if (!raw || raw.gameStatus !== 'final') continue;
+      const actual = (raw[p.stat.toLowerCase() as 'pts'|'reb'|'ast'] as number) ?? 0;
+      const isHit = actual >= p.line;
+      total++;
+      if (isHit) hit++;
+      if (picks.locks.includes(p.player)) {
+        locksTotal++;
+        if (isHit) locksHit++;
+      }
+    }
+    if (total === 0) return null;
+    return { picks_total: total, picks_hit: hit, hit_rate: hit / total, locks_total: locksTotal, locks_hit: locksHit };
+  })();
 </script>
 
 <svelte:head>
@@ -139,8 +161,8 @@
                 {refreshing ? 'Updating…' : 'Refresh'}
               </button>
             </div>
-            {#if picks.results}
-              {@const r = picks.results}
+            {#if computedResults}
+              {@const r = computedResults}
               {@const hitPct = Math.round(r.hit_rate * 100)}
               <div class="hit-rate-row">
                 <div class="hit-rate-counts">
