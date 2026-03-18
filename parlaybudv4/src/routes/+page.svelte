@@ -72,16 +72,26 @@
     (liveData['__injured'] as string[] | undefined) ?? []
   );
 
-  function isVoided(player: string): boolean {
-    return injuredNames.has(player.toLowerCase());
+  // A pick is voided if:
+  // 1. Player is in the ESPN injury/DNP list, OR
+  // 2. The game is FINAL and the player has NO stats entry in liveData
+  //    (they didn't dress — completely absent from boxscore)
+  function isVoided(pick: Pick): boolean {
+    const key = pick.player.toLowerCase();
+    if (injuredNames.has(key)) return true;
+    // No stats entry AND no pre-game entry means game happened without them
+    const hasStats = !!liveData[key];
+    const isPreGame = !!liveData[`__pre_${pick.team}`];
+    if (!hasStats && !isPreGame) return true;
+    return false;
   }
 
   $: lockPicks = picks
-    ? picks.picks.filter((p: Pick) => picks!.locks.includes(p.player) && !isVoided(p.player))
+    ? picks.picks.filter((p: Pick) => picks!.locks.includes(p.player) && !isVoided(p))
     : [];
 
   $: otherPicks = picks
-    ? picks.picks.filter((p: Pick) => !picks!.locks.includes(p.player) && !isVoided(p.player))
+    ? picks.picks.filter((p: Pick) => !picks!.locks.includes(p.player) && !isVoided(p))
     : [];
 
   $: avgProb = picks
@@ -101,7 +111,7 @@
       if (details.length === 0) return picks.results;
       let total = 0, hit = 0, locksTotal = 0, locksHit = 0;
       for (const d of details) {
-        if (isVoided(d.player)) continue; // skip DNP/suspended
+        if (injuredNames.has(d.player.toLowerCase())) continue; // skip DNP/suspended
         total++;
         if (d.hit) hit++;
         if (picks.locks.includes(d.player)) {
@@ -115,7 +125,7 @@
     // Derive from ESPN final data
     let total = 0, hit = 0, locksTotal = 0, locksHit = 0;
     for (const p of picks.picks) {
-      if (isVoided(p.player)) continue; // skip DNP/suspended
+      if (isVoided(p)) continue; // skip DNP/suspended
       const raw = liveData[p.player.toLowerCase()] as Record<string, unknown> | undefined;
       if (!raw || raw.gameStatus !== 'final') continue;
       const actual = (raw[p.stat.toLowerCase() as 'pts'|'reb'|'ast'] as number) ?? 0;
@@ -300,7 +310,7 @@
                 <h2 class="section-title">All Picks</h2>
               </div>
             </div>
-            <PicksTable picks={picks.picks.filter((p: Pick) => !isVoided(p.player))} {liveData} />
+            <PicksTable picks={picks.picks.filter((p: Pick) => !isVoided(p))} {liveData} />
           </section>
 
           <!-- Other Picks -->

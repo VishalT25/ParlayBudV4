@@ -54,6 +54,8 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
         const bs = await bsRes.json();
 
         const teamRows: unknown[] = bs.boxscore?.players ?? [];
+        const dnpNames: string[] = [];
+
         for (const teamData of teamRows) {
           const td = teamData as Record<string, unknown>;
           const statistics = ((td.statistics as unknown[])?.[0]) as Record<string, unknown> | undefined;
@@ -61,6 +63,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
 
           const names = (statistics.names as string[]) ?? [];
           // ESPN returns uppercase stat names: 'PTS', 'REB', 'AST'
+          const minIdx = names.findIndex(n => n.toUpperCase() === 'MIN');
           const ptsIdx = names.findIndex(n => n.toUpperCase() === 'PTS');
           const rebIdx = names.findIndex(n => n.toUpperCase() === 'REB');
           const astIdx = names.findIndex(n => n.toUpperCase() === 'AST');
@@ -72,7 +75,17 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
             const name = (athlete?.displayName as string) ?? '';
             if (!name) continue;
 
+            const didNotPlay = !!(a.didNotPlay as boolean);
             const stats = (a.stats as string[]) ?? [];
+            const minutes = stats[minIdx] ?? '0';
+            const playedZero = minutes === '0' || minutes === '0:00' || minutes === '';
+
+            // DNP — add to voided list, skip stats
+            if (didNotPlay || (isFinal && playedZero && stats.length > 0)) {
+              dnpNames.push(name.toLowerCase());
+              continue;
+            }
+
             const pts = parseInt(stats[ptsIdx] ?? '0') || 0;
             const reb = parseInt(stats[rebIdx] ?? '0') || 0;
             const ast = parseInt(stats[astIdx] ?? '0') || 0;
@@ -88,6 +101,12 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
               awayScore,
             };
           }
+        }
+
+        // Merge DNP players into the injured list
+        if (dnpNames.length > 0) {
+          const existing = (result['__injured'] as string[]) ?? [];
+          result['__injured'] = [...new Set([...existing, ...dnpNames])];
         }
       })
     );
