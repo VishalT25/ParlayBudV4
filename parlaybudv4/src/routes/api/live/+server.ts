@@ -92,6 +92,27 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
       })
     );
 
+    // ── Fetch current injury list (updates on every refresh) ──
+    try {
+      const injRes = await fetch(`${ESPN}/injuries`);
+      if (injRes.ok) {
+        const injData = await injRes.json();
+        const injured: string[] = [];
+        const EXCLUDE = ['out', 'suspension', 'suspended', 'doubtful'];
+        for (const team of injData.injuries ?? []) {
+          for (const inj of team.injuries ?? []) {
+            const status = (inj.status ?? '').toLowerCase();
+            if (!EXCLUDE.some(s => status.includes(s))) continue;
+            const athlete = inj.athlete ?? {};
+            const name: string = athlete.displayName
+              ?? `${athlete.firstName ?? ''} ${athlete.lastName ?? ''}`.trim();
+            if (name.length > 3) injured.push(name.toLowerCase());
+          }
+        }
+        result['__injured'] = injured;
+      }
+    } catch { /* injury fetch failure is non-fatal */ }
+
     return json(result);
   } catch {
     return json({});

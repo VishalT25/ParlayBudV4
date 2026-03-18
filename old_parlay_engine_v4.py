@@ -45,7 +45,7 @@ FETCH_ODDS = False   # True = pull live lines from Odds API
 
 DB_PATH = "parlay_ml.db"
 MODELS_DIR = "models"
-ODDS_API_KEY = "805d66ea970d21583170a3b1c459c851"
+ODDS_API_KEY = "1352e9cd8058c67615efe0896a44f5f1"
 SEASON = "2025-26"
 MIN_PROB = 0.60      # minimum ML probability to show a pick
 MIN_EDGE = 0.05      # minimum edge (model_prob - implied) for live odds mode
@@ -612,6 +612,113 @@ def apply_safety_filters(picks: List[Pick], has_live: bool) -> dict:
 
 
 # ============================================================
+# JSON EXPORT
+# ============================================================
+
+def export_json(filtered, games, injuries, models, tonight_players, args):
+    """Write picks to parlaybudv4/static/picks/{date}.json"""
+    from datetime import timezone
+    picks     = filtered['all_picks']
+    locks     = filtered['locks']
+    p3        = filtered['parlay_3']
+    p5        = filtered['parlay_5']
+    today_str = datetime.now().strftime("%Y-%m-%d")
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    out_dir    = os.path.join(script_dir, "parlaybudv4", "static", "picks")
+    os.makedirs(out_dir, exist_ok=True)
+    out_path   = os.path.join(out_dir, f"{today_str}.json")
+
+    def pick_to_dict(p: Pick) -> dict:
+        margin = (p.season_avg or 0) - p.line
+        odds_ok   = not (p.has_live_line and p.over_odds >= 200)
+        l3_ok     = p.last_3_avg >= p.line
+        l5_ok     = p.last_5_avg >= p.line
+        min_avg   = {"PTS": 15.0, "REB": 5.0, "AST": 3.0}
+        min_marg  = {"PTS": 3.5, "REB": 1.5, "AST": 1.5}
+        margin_ok = margin >= min_marg.get(p.stat, 1.5)
+        avg_ok    = (p.season_avg or 0) >= min_avg.get(p.stat, 5.0)
+        unusual   = (p.stat == "PTS" and margin > 12) or \
+                    (p.stat == "REB" and margin > 5)  or \
+                    (p.stat == "AST" and margin > 4)
+        warnings = []
+        if not odds_ok:  warnings.append("ODDS_TRAP")
+        if not l3_ok:    warnings.append("L3_BELOW_LINE")
+        if not l5_ok:    warnings.append("L5_BELOW_LINE")
+        if unusual:      warnings.append("UNUSUAL_LINE")
+        passes_lock   = bool(odds_ok and l3_ok and margin_ok and avg_ok and p.model_prob >= 0.65)
+        passes_parlay = bool(odds_ok and l3_ok and p.model_prob >= 0.62)
+        return {
+            "player": p.player, "team": p.team, "opponent": p.opponent,
+            "game": p.game, "stat": p.stat, "line": float(p.line),
+            "over_odds": int(p.over_odds), "book": p.book,
+            "model_prob": round(float(p.model_prob), 4),
+            "implied_prob": round(float(p.implied_prob), 4),
+            "edge": round(float(p.edge), 4), "ev": round(float(p.ev), 4),
+            "season_avg": round(float(p.season_avg or 0), 1),
+            "last_5_avg": round(float(p.last_5_avg), 1),
+            "last_3_avg": round(float(p.last_3_avg), 1),
+            "is_home": int(p.is_home), "has_live_line": bool(p.has_live_line),
+            "warnings": warnings,
+            "passes_lock_filter": passes_lock,
+            "passes_parlay_filter": passes_parlay,
+            "filter_details": {
+                "odds_ok": bool(odds_ok), "l3_clears_line": bool(l3_ok),
+                "l5_clears_line": bool(l5_ok), "season_margin": round(float(margin), 2),
+                "season_margin_ok": bool(margin_ok), "min_avg_ok": bool(avg_ok),
+                "unusual_line": bool(unusual),
+            },
+        }
+
+    def parlay_dict(legs: list) -> dict:
+        import math
+        combined = math.prod(p.model_prob for p in legs) if legs else 0
+        leg_strs = [f"{p.stat} O{p.line} ({p.model_prob:.0%})" for p in legs]
+        return {
+            "legs": leg_strs,
+            "combined_prob": round(combined, 4),
+            "players": [p.player for p in legs],
+        }
+
+    # model_stats
+    model_stats = {}
+    for stat, m in models.items():
+        mt = m.get('metrics', {})
+        # hit_rate_70: fraction of predictions >= 0.70 threshold that actually hit
+        # If not stored, fall back to accuracy
+        model_stats[stat] = {
+            "auc": round(mt.get('roc_auc', 0), 3),
+            "hit_rate_70": round(mt.get('hit_rate_70', mt.get('accuracy', 0)), 3),
+        }
+
+    games_list = [{"away": away, "home": home, "label": label}
+                  for label, (away, home) in games.items()]
+
+    injuries_list = [{"player": name, "status": status, "reason": ""}
+                     for name, status in injuries.items()]
+
+    payload = {
+        "date": today_str,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "model_version": "v4-xgboost",
+        "games": games_list,
+        "injuries": injuries_list,
+        "picks": [pick_to_dict(p) for p in picks],
+        "locks": [p.player for p in locks],
+        "parlay_3leg": parlay_dict(p3),
+        "parlay_5leg": parlay_dict(p5),
+        "model_stats": model_stats,
+        "results": None,
+    }
+
+    with open(out_path, "w") as f:
+        json.dump(payload, f, indent=2)
+
+    print(f"\n✅ JSON written → {out_path}")
+    print(f"   {len(picks)} picks | {len(locks)} locks | {len(p3)}-leg + {len(p5)}-leg parlays")
+
+
+# ============================================================
 # OUTPUT
 # ============================================================
 
@@ -743,6 +850,7 @@ def main():
     parser.add_argument('--models', default=MODELS_DIR)
     parser.add_argument('--season', default=SEASON)
     parser.add_argument('--odds-key', default=ODDS_API_KEY)
+    parser.add_argument('--json-output', action='store_true', help='Write picks JSON for the dashboard')
     args = parser.parse_args()
 
     print("=" * W)
@@ -843,6 +951,10 @@ def main():
 
     # Print results
     print_results(filtered, injuries, has_live, args.min_prob)
+
+    # Export JSON for dashboard
+    if args.json_output:
+        export_json(filtered, games, injuries, models, tonight_players, args)
 
 
 if __name__ == "__main__":

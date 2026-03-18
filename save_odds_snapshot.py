@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 log = logging.getLogger("odds")
 
 DB_PATH = "parlay_ml.db"
-ODDS_API_KEY = "805d66ea970d21583170a3b1c459c851"
+ODDS_API_KEY = "1352e9cd8058c67615efe0896a44f5f1"
 
 MARKET_MAP = {
     "player_points": "PTS",
@@ -200,6 +200,8 @@ def main():
     parser = argparse.ArgumentParser(description="Save daily odds snapshot")
     parser.add_argument("--key", default=ODDS_API_KEY, help="Odds API key")
     parser.add_argument("--db", default=DB_PATH, help="Database path")
+    parser.add_argument("--skip-if-exists", action="store_true",
+                        help="Skip API fetch if today's lines are already in the database")
     args = parser.parse_args()
 
     print("=" * 60)
@@ -209,6 +211,18 @@ def main():
 
     conn = sqlite3.connect(args.db)
     ensure_table(conn)
+
+    # Skip if already have today's lines and flag is set
+    if args.skip_if_exists:
+        today = datetime.now().strftime("%Y-%m-%d")
+        existing = conn.execute(
+            "SELECT COUNT(*) FROM odds_snapshots WHERE game_date = ?", (today,)
+        ).fetchone()[0]
+        if existing > 0:
+            log.info(f"  💾 Already have {existing} lines for today — skipping API fetch (use --force-odds to refresh)")
+            print_summary(conn)
+            conn.close()
+            return
 
     total = fetch_and_save(conn, args.key)
     log.info(f"\n✅ Saved {total} prop lines to database")

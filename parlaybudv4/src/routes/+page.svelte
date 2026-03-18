@@ -67,12 +67,21 @@
     return null;
   }
 
+  // Players ruled out since the JSON was generated (updated on every refresh)
+  $: injuredNames = new Set<string>(
+    (liveData['__injured'] as string[] | undefined) ?? []
+  );
+
+  function isVoided(player: string): boolean {
+    return injuredNames.has(player.toLowerCase());
+  }
+
   $: lockPicks = picks
-    ? picks.picks.filter((p: Pick) => picks!.locks.includes(p.player))
+    ? picks.picks.filter((p: Pick) => picks!.locks.includes(p.player) && !isVoided(p.player))
     : [];
 
   $: otherPicks = picks
-    ? picks.picks.filter((p: Pick) => !picks!.locks.includes(p.player))
+    ? picks.picks.filter((p: Pick) => !picks!.locks.includes(p.player) && !isVoided(p.player))
     : [];
 
   $: avgProb = picks
@@ -83,12 +92,30 @@
   $: maxProb = picks ? Math.max(...picks.picks.map((p: Pick) => p.model_prob)) : 0;
 
   // Compute hit rate from liveData when JSON results are absent
+  // Voided picks (player ruled out before game) are excluded from all counts
   $: computedResults = (() => {
     if (!picks) return null;
-    if (picks.results) return picks.results;
+    if (picks.results) {
+      // Re-derive from details to exclude voided picks
+      const details = picks.results.details ?? [];
+      if (details.length === 0) return picks.results;
+      let total = 0, hit = 0, locksTotal = 0, locksHit = 0;
+      for (const d of details) {
+        if (isVoided(d.player)) continue; // skip DNP/suspended
+        total++;
+        if (d.hit) hit++;
+        if (picks.locks.includes(d.player)) {
+          locksTotal++;
+          if (d.hit) locksHit++;
+        }
+      }
+      if (total === 0) return null;
+      return { picks_total: total, picks_hit: hit, hit_rate: hit / total, locks_total: locksTotal, locks_hit: locksHit };
+    }
     // Derive from ESPN final data
     let total = 0, hit = 0, locksTotal = 0, locksHit = 0;
     for (const p of picks.picks) {
+      if (isVoided(p.player)) continue; // skip DNP/suspended
       const raw = liveData[p.player.toLowerCase()] as Record<string, unknown> | undefined;
       if (!raw || raw.gameStatus !== 'final') continue;
       const actual = (raw[p.stat.toLowerCase() as 'pts'|'reb'|'ast'] as number) ?? 0;
@@ -273,7 +300,7 @@
                 <h2 class="section-title">All Picks</h2>
               </div>
             </div>
-            <PicksTable picks={picks.picks} {liveData} />
+            <PicksTable picks={picks.picks.filter((p: Pick) => !isVoided(p.player))} {liveData} />
           </section>
 
           <!-- Other Picks -->

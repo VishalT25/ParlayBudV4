@@ -17,6 +17,12 @@ models/*.pkl
 # Database (large, local only)
 parlay_ml.db
 
+# Daily odds cache (local only, re-fetched each day)
+odds_cache_*.json
+
+# DARKO daily projection CSVs (downloaded fresh each day)
+DARKO_daily_projections_*.csv
+
 # ── Node / SvelteKit ─────────────────────────────────────
 parlaybudv4/node_modules/
 parlaybudv4/.svelte-kit/
