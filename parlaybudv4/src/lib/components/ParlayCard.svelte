@@ -12,9 +12,19 @@
   $: n = parlay.legs.length;
   $: payoutMultiplier = Math.pow(1.909, n);
   $: combinedPct = Math.round(parlay.combined_prob * 100);
+  $: injuredNames = new Set<string>((liveData['__injured'] as string[] | undefined) ?? []);
 
   function getPickForPlayer(playerName: string): Pick | undefined {
     return picks.find(p => p.player === playerName);
+  }
+
+  function isVoided(pick: Pick): boolean {
+    const key = pick.player.toLowerCase();
+    if (injuredNames.has(key)) return true;
+    const hasStats = !!liveData[key];
+    const isPreGame = !!liveData[`__pre_${pick.team}`];
+    if (!hasStats && !isPreGame) return true;
+    return false;
   }
 
   function getLegLive(pick: Pick | undefined) {
@@ -73,7 +83,11 @@
               <span class="leg-prob" style="color: {accentColor};">{Math.round(playerPick.model_prob * 100)}%</span>
             {/if}
           </div>
-          {#if playerPick}
+          {#if playerPick && isVoided(playerPick)}
+            <div class="leg-live leg-live--void">
+              <span>⊘ VOID — DNP</span>
+            </div>
+          {:else if playerPick}
             {@const ls = getLegLive(playerPick)}
             {#if ls}
               <div class="leg-live"
@@ -86,7 +100,11 @@
                   <span>{ls.value} {playerPick.stat} / need {playerPick.line}</span>
                   <span class="leg-live-score">{ls.awayTeam} {ls.awayScore}–{ls.homeTeam} {ls.homeScore} · Q{ls.period} {ls.clock}</span>
                 {:else if ls.gameStatus === 'final'}
-                  <span>{ls.value >= playerPick.line ? '✓ Hit' : '✗ Miss'} — {ls.value} {playerPick.stat}</span>
+                  {#if ls.value >= playerPick.line}
+                    <span>✓ Line Hit</span>
+                  {:else}
+                    <span>✗ Miss — {ls.value} {playerPick.stat}</span>
+                  {/if}
                   <span class="leg-live-final">FINAL</span>
                 {/if}
               </div>
@@ -274,6 +292,7 @@
 .leg-live--live { color: #ef4444; }
 .leg-live--hit  { color: #22c55e; }
 .leg-live--miss { color: #ef4444; }
+.leg-live--void { color: #6b7280; font-style: italic; }
 
 .leg-live-dot {
   width: 5px;
