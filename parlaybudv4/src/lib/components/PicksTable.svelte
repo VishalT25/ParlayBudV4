@@ -223,8 +223,12 @@
                   >
                     {#if ls.gameStatus === 'live'}
                       <span class="detail-dot"></span>
-                      <strong>{ls.value} {pick.stat}</strong>
-                      <span>/ need {pick.line} · {pick.line - ls.value > 0 ? (pick.line - ls.value).toFixed(1) + ' away' : 'OVER ✓'}</span>
+                      {#if ls.value >= pick.line}
+                        <span class="detail-over">{ls.value} / {pick.line} {pick.stat} ✓</span>
+                      {:else}
+                        <strong>{ls.value} {pick.stat}</strong>
+                        <span>/ need {pick.line} · {(pick.line - ls.value).toFixed(1)} away</span>
+                      {/if}
                       <span class="detail-score">{ls.awayTeam} {ls.awayScore} – {ls.homeTeam} {ls.homeScore} &nbsp;·&nbsp; Q{ls.period} {ls.clock}</span>
                     {:else if ls.gameStatus === 'final'}
                       <span class="detail-result">{ls.value >= pick.line ? '✓ Hit' : '✗ Miss'}</span>
@@ -460,6 +464,7 @@ td {
   background: #ef4444; flex-shrink: 0;
   animation: tbl-blink 1.2s infinite;
 }
+.detail-over { font-weight: 700; color: #22c55e; }
 .detail-result { font-weight: 800; font-size: 13px; }
 .detail-score  { color: var(--text-dim); font-size: 11px; margin-left: auto; }
 .detail-final  { color: var(--text-dim); font-size: 11px; margin-left: auto; }

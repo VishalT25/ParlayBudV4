@@ -8,24 +8,10 @@ export const load: PageLoad = async ({ fetch, url, depends }) => {
 
   // Load the requested date's picks
   let picks: DayPicks | null = null;
-  let displayDate = requestedDate;
   try {
     const res = await fetch(`/picks/${requestedDate}.json`);
     if (res.ok) picks = await res.json();
   } catch { /* no file for this date */ }
-
-  // If no picks for the requested date and the user didn't explicitly pick a date,
-  // fall back to the most recent available date
-  if (!picks && requestedDate === today) {
-    for (let i = 1; i <= 14; i++) {
-      const d = new Date(new Date(today + 'T12:00:00').getTime() - i * 86400000)
-        .toISOString().split('T')[0];
-      try {
-        const res = await fetch(`/picks/${d}.json`);
-        if (res.ok) { picks = await res.json(); displayDate = d; break; }
-      } catch { /* skip */ }
-    }
-  }
 
   // Scan the past 30 days before requestedDate for historical leg results
   const pastDates: string[] = [];

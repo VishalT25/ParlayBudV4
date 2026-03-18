@@ -97,14 +97,14 @@
               >
                 {#if ls.gameStatus === 'live'}
                   <span class="leg-live-dot"></span>
-                  <span>{ls.value} {playerPick.stat} / need {playerPick.line}</span>
+                  {#if ls.value >= playerPick.line}
+                    <span class="leg-live-over">{ls.value} / {playerPick.line} {playerPick.stat} ✓</span>
+                  {:else}
+                    <span>{ls.value} / {playerPick.line} {playerPick.stat}</span>
+                  {/if}
                   <span class="leg-live-score">{ls.awayTeam} {ls.awayScore}–{ls.homeTeam} {ls.homeScore} · Q{ls.period} {ls.clock}</span>
                 {:else if ls.gameStatus === 'final'}
-                  {#if ls.value >= playerPick.line}
-                    <span>✓ Line Hit</span>
-                  {:else}
-                    <span>✗ Miss — {ls.value} {playerPick.stat}</span>
-                  {/if}
+                  <span>{ls.value >= playerPick.line ? '✓ Hit' : '✗ Miss'} — {ls.value} {playerPick.stat}</span>
                   <span class="leg-live-final">FINAL</span>
                 {/if}
               </div>
@@ -115,15 +115,6 @@
     {/each}
   </div>
 
-  <div class="parlay-footer" style="border-top-color: {accentColor}20;">
-    <div class="payout-info">
-      <span class="payout-label">Est. Payout</span>
-      <span class="payout-multiplier" style="color: {accentColor};">{payoutMultiplier.toFixed(1)}x</span>
-    </div>
-    <div class="parlay-note">
-      <span class="note-text">$10 → <strong style="color: {accentColor};">${(10 * payoutMultiplier).toFixed(2)}</strong></span>
-    </div>
-  </div>
 </div>
 
 <style>
@@ -304,6 +295,7 @@
 }
 @keyframes leg-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
+.leg-live-over { color: #22c55e; font-weight: 700; }
 .leg-live-score { color: var(--text-dim); font-weight: 400; }
 .leg-live-final { opacity: 0.5; font-size: 9px; letter-spacing: 0.5px; margin-left: auto; }
 

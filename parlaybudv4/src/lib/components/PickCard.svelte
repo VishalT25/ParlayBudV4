@@ -181,10 +181,14 @@
           <span class="ls-main">Tipoff {fmtTipoff(liveStatus.gameTime)}</span>
         {:else if liveStatus.gameStatus === 'live'}
           <div class="ls-live-dot"></div>
-          <span class="ls-main">
-            <strong>{liveStatus.value} {pick.stat}</strong>
-            <span class="ls-need">/ need {pick.line}</span>
-          </span>
+          {#if (liveStatus.value ?? 0) >= pick.line}
+            <span class="ls-over">{liveStatus.value} / {pick.line} {pick.stat} ✓</span>
+          {:else}
+            <span class="ls-main">
+              <strong>{liveStatus.value} {pick.stat}</strong>
+              <span class="ls-need">/ need {pick.line}</span>
+            </span>
+          {/if}
           <span class="ls-score">
             {liveStatus.awayTeam} {liveStatus.awayScore} – {liveStatus.homeTeam} {liveStatus.homeScore}
             <span class="ls-period">Q{liveStatus.period} {liveStatus.clock}</span>
@@ -594,6 +598,12 @@
   font-weight: 400;
   color: var(--text-dim);
   margin-left: 2px;
+}
+
+.ls-over {
+  font-weight: 700;
+  color: #22c55e;
+  flex: 1;
 }
 
 .ls-score {
