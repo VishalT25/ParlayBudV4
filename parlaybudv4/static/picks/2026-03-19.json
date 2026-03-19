@@ -1,0 +1,814 @@
+{
+  "date": "2026-03-19",
+  "generated_at": "2026-03-19T17:59:47.748787+00:00",
+  "model_version": "v5-hybrid",
+  "games": [
+    {
+      "away": "ORL",
+      "home": "CHA",
+      "label": "ORL @ CHA"
+    },
+    {
+      "away": "DET",
+      "home": "WAS",
+      "label": "DET @ WAS"
+    },
+    {
+      "away": "LAL",
+      "home": "MIA",
+      "label": "LAL @ MIA"
+    },
+    {
+      "away": "CLE",
+      "home": "CHI",
+      "label": "CLE @ CHI"
+    },
+    {
+      "away": "LAC",
+      "home": "NOP",
+      "label": "LAC @ NOP"
+    },
+    {
+      "away": "PHX",
+      "home": "SAS",
+      "label": "PHX @ SAS"
+    },
+    {
+      "away": "MIL",
+      "home": "UTAH",
+      "label": "MIL @ UTAH"
+    },
+    {
+      "away": "PHI",
+      "home": "SAC",
+      "label": "PHI @ SAC"
+    }
+  ],
+  "injuries": [
+    {
+      "player": "Nikola Vucevic",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Egor Demin",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Michael Porter Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Day'Ron Sharpe",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tidjane Salaun",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Isaac Okoro",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jaden Ivey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anfernee Simons",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach Collins",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Noa Essengue",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Proctor",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Craig Porter Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jarrett Allen",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kyrie Irving",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Dereck Lively II",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Peyton Watson",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Cade Cunningham",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Wendell Moore Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Isaiah Stewart",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Moses Moody",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Stephen Curry",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Seth Curry",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Al Horford",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jimmy Butler III",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jae'Sean Tate",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Steven Adams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Fred VanVleet",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Andrew Nembhard",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Micah Potter",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Pascal Siakam",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Johnny Furphy",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Haliburton",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Bennedict Mathurin",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Yanic Konan Niederhauser",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Bradley Beal",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Maxi Kleber",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Brandon Clarke",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Santi Aldama",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Scotty Pippen Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Ja Morant",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach Edey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kentavious Caldwell-Pope",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Terry Rozier",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Andrew Wiggins",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Giannis Antetokounmpo",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anthony Edwards",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Bryce McGowens",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Miles McBride",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Branden Carlson",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jalen Williams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Thomas Sorber",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Wendell Carter Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jonathan Isaac",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anthony Black",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Franz Wagner",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Joel Embiid",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kelly Oubre Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Maxey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Johni Broome",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Paul George",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Dillon Brooks",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Mark Williams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Shaedon Sharpe",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Damian Lillard",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Malik Monk",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Devin Carter",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Drew Eubanks",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Keegan Murray",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "De'Andre Hunter",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Domantas Sabonis",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach LaVine",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "David Jones Garcia",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Collin Murray-Boyles",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Chucky Hepburn",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Keyonte George",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Lauri Markkanen",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jusuf Nurkic",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jaren Jackson Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Walker Kessler",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Bilal Coulibaly",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Leaky Black",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Trae Young",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anthony Davis",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kyshawn George",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "D'Angelo Russell",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Cam Whitmore",
+      "status": "OUT",
+      "reason": ""
+    }
+  ],
+  "picks": [
+    {
+      "player": "Russell Westbrook",
+      "team": "SAC",
+      "opponent": "PHI",
+      "game": "PHI @ SAC",
+      "stat": "AST",
+      "line": 5.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.7082,
+      "implied_prob": 0.5,
+      "edge": 0.2082,
+      "ev": 0.4164,
+      "season_avg": 6.6,
+      "last_5_avg": 7.4,
+      "last_3_avg": 9.7,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.6,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jaime Jaquez Jr.",
+      "team": "MIA",
+      "opponent": "LAL",
+      "game": "LAL @ MIA",
+      "stat": "AST",
+      "line": 3.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6924,
+      "implied_prob": 0.5,
+      "edge": 0.1924,
+      "ev": 0.3848,
+      "season_avg": 4.8,
+      "last_5_avg": 6.0,
+      "last_3_avg": 6.3,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.8,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Kevin Porter Jr.",
+      "team": "MIL",
+      "opponent": "UTAH",
+      "game": "MIL @ UTAH",
+      "stat": "AST",
+      "line": 4.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6857,
+      "implied_prob": 0.5,
+      "edge": 0.1857,
+      "ev": 0.3714,
+      "season_avg": 7.4,
+      "last_5_avg": 5.6,
+      "last_3_avg": 5.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 3.4,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Ryan Rollins",
+      "team": "MIL",
+      "opponent": "UTAH",
+      "game": "MIL @ UTAH",
+      "stat": "AST",
+      "line": 4.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6717,
+      "implied_prob": 0.5,
+      "edge": 0.1717,
+      "ev": 0.3433,
+      "season_avg": 5.6,
+      "last_5_avg": 6.0,
+      "last_3_avg": 5.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.6,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Ryan Rollins",
+      "team": "MIL",
+      "opponent": "UTAH",
+      "game": "MIL @ UTAH",
+      "stat": "PTS",
+      "line": 12.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.664,
+      "implied_prob": 0.5,
+      "edge": 0.164,
+      "ev": 0.328,
+      "season_avg": 16.8,
+      "last_5_avg": 12.0,
+      "last_3_avg": 14.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [
+        "L5_BELOW_LINE"
+      ],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": false,
+        "season_margin": 4.3,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Russell Westbrook",
+      "team": "SAC",
+      "opponent": "PHI",
+      "game": "PHI @ SAC",
+      "stat": "PTS",
+      "line": 12.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6538,
+      "implied_prob": 0.5,
+      "edge": 0.1538,
+      "ev": 0.3075,
+      "season_avg": 15.2,
+      "last_5_avg": 18.8,
+      "last_3_avg": 19.3,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.7,
+        "season_margin_ok": false,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "DeMar DeRozan",
+      "team": "SAC",
+      "opponent": "PHI",
+      "game": "PHI @ SAC",
+      "stat": "PTS",
+      "line": 14.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6536,
+      "implied_prob": 0.5,
+      "edge": 0.1536,
+      "ev": 0.3072,
+      "season_avg": 18.6,
+      "last_5_avg": 12.0,
+      "last_3_avg": 14.7,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [
+        "L5_BELOW_LINE"
+      ],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": false,
+        "season_margin": 4.6,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Zion Williamson",
+      "team": "NOP",
+      "opponent": "LAC",
+      "game": "LAC @ NOP",
+      "stat": "REB",
+      "line": 5.5,
+      "over_odds": -125,
+      "book": "FanDuel",
+      "model_prob": 0.6433,
+      "implied_prob": 0.5556,
+      "edge": 0.0878,
+      "ev": 0.158,
+      "season_avg": 5.8,
+      "last_5_avg": 5.2,
+      "last_3_avg": 7.0,
+      "is_home": 1,
+      "has_live_line": true,
+      "warnings": [
+        "L5_BELOW_LINE"
+      ],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": false,
+        "season_margin": 0.3,
+        "season_margin_ok": false,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Bobby Portis",
+      "team": "MIL",
+      "opponent": "UTAH",
+      "game": "MIL @ UTAH",
+      "stat": "PTS",
+      "line": 12.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6118,
+      "implied_prob": 0.5,
+      "edge": 0.1118,
+      "ev": 0.2236,
+      "season_avg": 13.7,
+      "last_5_avg": 14.6,
+      "last_3_avg": 14.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": false,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.2,
+        "season_margin_ok": false,
+        "min_avg_ok": false,
+        "unusual_line": false
+      }
+    }
+  ],
+  "locks": [
+    "Russell Westbrook",
+    "Jaime Jaquez Jr.",
+    "Kevin Porter Jr."
+  ],
+  "parlay_3leg": {
+    "legs": [
+      "AST O5.0 (71%)",
+      "AST O3.0 (69%)",
+      "AST O4.0 (69%)"
+    ],
+    "combined_prob": 0.3362,
+    "players": [
+      "Russell Westbrook",
+      "Jaime Jaquez Jr.",
+      "Kevin Porter Jr."
+    ]
+  },
+  "parlay_5leg": {
+    "legs": [
+      "AST O5.0 (71%)",
+      "AST O3.0 (69%)",
+      "AST O4.0 (69%)",
+      "REB O5.5 (64%)"
+    ],
+    "combined_prob": 0.2163,
+    "players": [
+      "Russell Westbrook",
+      "Jaime Jaquez Jr.",
+      "Kevin Porter Jr.",
+      "Zion Williamson"
+    ]
+  },
+  "model_stats": {
+    "PTS": {
+      "auc": 0.626,
+      "hit_rate_70": 0.628
+    },
+    "REB": {
+      "auc": 0.617,
+      "hit_rate_70": 0.629
+    },
+    "AST": {
+      "auc": 0.658,
+      "hit_rate_70": 0.632
+    }
+  },
+  "results": null
+}
