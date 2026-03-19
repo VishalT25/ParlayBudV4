@@ -6,6 +6,7 @@
   export let data: PageData;
 
   $: metrics = data.metrics;
+  $: livePerf = data.livePerf as Record<string, { attempts: number; hits: number }>;
 
   let activeImportanceTab: 'PTS' | 'REB' | 'AST' = 'PTS';
 
@@ -41,7 +42,7 @@
       </div>
       <div class="model-version-badge">
         <span class="mv-icon">🤖</span>
-        <span class="mv-text">v4-xgboost</span>
+        <span class="mv-text">v5.14 · XGBoost + DARKO</span>
       </div>
     </div>
 
@@ -72,6 +73,54 @@
         <div class="tc-sub">{metrics.training.date_range.start} → {metrics.training.date_range.end}</div>
       </div>
     </div>
+
+    <!-- Live Pick Performance -->
+    {@const totalAttempts = statList.reduce((s, stat) => s + (livePerf[stat]?.attempts ?? 0), 0)}
+    {#if totalAttempts > 0}
+    <div class="section-card glass">
+      <div class="section-header-bar">
+        <h2 class="section-title">
+          <span class="section-icon">📡</span>
+          Live Pick Performance (Last 30 Days)
+        </h2>
+        <span class="live-badge">Real-world results</span>
+      </div>
+      <div class="live-perf-grid">
+        {#each statList as stat}
+          {@const perf = livePerf[stat] ?? { attempts: 0, hits: 0 }}
+          {@const color = getStatColor(stat)}
+          {@const rate = perf.attempts > 0 ? perf.hits / perf.attempts : null}
+          <div class="live-perf-card">
+            <div class="lp-header">
+              <span class="stat-pill" style="background: {color}15; color: {color}; border-color: {color}30;">{stat}</span>
+              {#if rate !== null}
+                <span class="lp-rate" style="color: {rate >= 0.7 ? '#22c55e' : rate >= 0.6 ? '#f59e0b' : '#ef4444'};">
+                  {(rate * 100).toFixed(1)}%
+                </span>
+              {:else}
+                <span class="lp-rate lp-rate--empty">No data</span>
+              {/if}
+            </div>
+            {#if rate !== null}
+              <div class="lp-bar-track">
+                <div class="lp-bar-fill" style="width: {rate * 100}%; background: {rate >= 0.7 ? '#22c55e' : rate >= 0.6 ? '#f59e0b' : '#ef4444'};"></div>
+                <div class="lp-target-line"></div>
+              </div>
+              <div class="lp-detail">
+                <span>{perf.hits} hit / {perf.attempts} picks</span>
+                <span class="lp-target-label">70% target</span>
+              </div>
+            {:else}
+              <div class="lp-bar-track">
+                <div class="lp-target-line"></div>
+              </div>
+              <div class="lp-detail"><span class="lp-empty-hint">Picks loading…</span></div>
+            {/if}
+          </div>
+        {/each}
+      </div>
+    </div>
+    {/if}
 
     <!-- Model Metrics Table -->
     <div class="section-card glass">
@@ -704,6 +753,95 @@
   line-height: 1.6;
 }
 
+/* Live Performance */
+.live-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #22c55e;
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.25);
+  padding: 3px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.live-perf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--card-border);
+}
+
+.live-perf-card {
+  padding: 1.25rem 1.5rem;
+  background: var(--card-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lp-rate {
+  font-size: 1.6rem;
+  font-weight: 900;
+  font-family: 'Orbitron', sans-serif;
+  line-height: 1;
+}
+
+.lp-rate--empty {
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.lp-bar-track {
+  position: relative;
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: visible;
+}
+
+.lp-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s ease;
+}
+
+.lp-target-line {
+  position: absolute;
+  top: -4px;
+  left: 70%;
+  width: 2px;
+  height: 14px;
+  background: rgba(245,158,11,0.6);
+  border-radius: 1px;
+}
+
+.lp-detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.lp-target-label {
+  color: rgba(245,158,11,0.7);
+  font-weight: 600;
+}
+
+.lp-empty-hint {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
 @media (max-width: 1024px) {
   .training-grid { grid-template-columns: repeat(2, 1fr); }
   .meth-grid { grid-template-columns: 1fr; }
@@ -711,6 +849,7 @@
 
 @media (max-width: 768px) {
   .training-grid { grid-template-columns: repeat(2, 1fr); }
+  .live-perf-grid { grid-template-columns: 1fr; }
   .section-header-bar { flex-direction: column; align-items: flex-start; }
   .page-title { font-size: 1.4rem; }
 }
