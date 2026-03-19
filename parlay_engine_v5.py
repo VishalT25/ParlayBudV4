@@ -409,6 +409,13 @@ def fetch_odds(api_key, script_dir=None, force=False):
         print(f"   {len(events)} events (API calls left: {rem})")
     except: return {}
 
+    # Bovada and BetOnline offer alternate/boosted lines (e.g. Tatum PTS 17.5 +205
+    # instead of the standard 25.5 -110), which distorts line selection and model calibration.
+    EXCLUDED_BOOKS = {'Bovada', 'BetOnline.ag', 'MyBookie.ag'}
+
+    # Priority order: prefer sharp/liquid books for the most accurate standard lines
+    BOOK_PRIORITY = ['FanDuel', 'DraftKings', 'BetMGM', 'BetRivers', 'Caesars', 'PointsBet']
+
     mkts = "player_points,player_rebounds,player_assists,player_threes"
     lines = {}
     for i, ev in enumerate(events):
@@ -416,8 +423,13 @@ def fetch_odds(api_key, script_dir=None, force=False):
         try:
             r2 = requests.get(f"https://api.the-odds-api.com/v4/sports/basketball_nba/events/{ev['id']}/odds",
                 params={"apiKey": api_key, "regions": "us", "markets": mkts, "oddsFormat": "american"}, timeout=15)
-            for bm in r2.json().get('bookmakers', []):
+            # Sort bookmakers so preferred books are processed last and win ties
+            bookmakers = r2.json().get('bookmakers', [])
+            bookmakers.sort(key=lambda b: BOOK_PRIORITY.index(b.get('title','')) if b.get('title','') in BOOK_PRIORITY else -1)
+            for bm in bookmakers:
                 bk = bm.get('title','')
+                if bk in EXCLUDED_BOOKS:
+                    continue
                 for mkt in bm.get('markets', []):
                     stat = MARKET_MAP.get(mkt.get('key',''))
                     if not stat: continue
@@ -429,7 +441,8 @@ def fetch_odds(api_key, script_dir=None, force=False):
                         elif o.get('name') == 'Under': outs[p]['under'] = o.get('price', -110)
                     for p, v in outs.items():
                         key = f"{p}|{stat}"
-                        if key not in lines or v.get('line',999) < lines[key]['line']:
+                        # Prefer higher (standard) lines — lower lines are usually alt lines at inflated odds
+                        if key not in lines or v.get('line', 0) > lines[key]['line']:
                             lines[key] = {'line': v['line'], 'over_odds': v.get('over',-110), 'book': bk}
         except: continue
     print(f"   ✅ {len(lines)} prop lines")
