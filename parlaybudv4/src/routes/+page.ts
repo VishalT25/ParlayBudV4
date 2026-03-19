@@ -3,7 +3,12 @@ import type { DayPicks } from '$lib/types';
 
 export const load: PageLoad = async ({ fetch, url, depends }) => {
   depends('parlaybudlive'); // lets invalidate('parlaybudlive') re-run just this load
-  const today = new Date().toISOString().split('T')[0];
+
+  // Shift back 3 hours: midnight–2:59am ET still shows the previous day's picks,
+  // giving late games time to finish before the next day's picks take over.
+  const adjusted = new Date(Date.now() - 3 * 60 * 60 * 1000);
+  const today = adjusted.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+
   const requestedDate = url.searchParams.get('date') || today;
 
   // Load the requested date's picks

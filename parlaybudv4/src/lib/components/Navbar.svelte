@@ -15,7 +15,6 @@
     <a href="/" class="logo">
       <span class="logo-icon">🏀</span>
       <span class="logo-text">ParlayBud</span>
-      <span class="logo-version">V4</span>
     </a>
 
     <div class="nav-links" class:open={menuOpen}>
@@ -77,17 +76,6 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 1px;
-}
-
-.logo-version {
-  background: var(--primary);
-  color: white;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-  font-family: 'Orbitron', sans-serif;
 }
 
 .nav-links {

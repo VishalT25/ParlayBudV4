@@ -11,7 +11,7 @@
 <footer class="site-footer">
   <div class="container">
     <p class="disclaimer">⚠️ For entertainment purposes only. Not financial advice. Gambling involves risk.</p>
-    <p class="footer-note">ParlayBud V4 • XGBoost ML Models • 34,763 game logs</p>
+    <p class="footer-note">ParlayBud v5.14 • XGBoost ML Models • 34,763 game logs</p>
   </div>
 </footer>
 
