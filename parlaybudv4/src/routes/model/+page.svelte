@@ -7,6 +7,7 @@
 
   $: metrics = data.metrics;
   $: livePerf = data.livePerf as Record<string, { attempts: number; hits: number }>;
+  $: totalLiveAttempts = statList.reduce((s, stat) => s + (livePerf[stat]?.attempts ?? 0), 0);
 
   let activeImportanceTab: 'PTS' | 'REB' | 'AST' = 'PTS';
 
@@ -75,8 +76,7 @@
     </div>
 
     <!-- Live Pick Performance -->
-    {@const totalAttempts = statList.reduce((s, stat) => s + (livePerf[stat]?.attempts ?? 0), 0)}
-    {#if totalAttempts > 0}
+    {#if totalLiveAttempts > 0}
     <div class="section-card glass">
       <div class="section-header-bar">
         <h2 class="section-title">
