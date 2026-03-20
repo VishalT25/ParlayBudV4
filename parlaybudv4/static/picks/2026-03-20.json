@@ -1,0 +1,1688 @@
+{
+  "date": "2026-03-20",
+  "generated_at": "2026-03-20T16:13:17.454811+00:00",
+  "model_version": "v5-hybrid",
+  "games": [
+    {
+      "away": "NYK",
+      "home": "BKN",
+      "label": "NYK @ BKN"
+    },
+    {
+      "away": "GSW",
+      "home": "DET",
+      "label": "GSW @ DET"
+    },
+    {
+      "away": "ATL",
+      "home": "HOU",
+      "label": "ATL @ HOU"
+    },
+    {
+      "away": "BOS",
+      "home": "MEM",
+      "label": "BOS @ MEM"
+    },
+    {
+      "away": "POR",
+      "home": "MIN",
+      "label": "POR @ MIN"
+    },
+    {
+      "away": "TOR",
+      "home": "DEN",
+      "label": "TOR @ DEN"
+    }
+  ],
+  "injuries": [
+    {
+      "player": "Jonathan Kuminga",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Nikola Vucevic",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Noah Clowney",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Michael Porter Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Egor Demin",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Day'Ron Sharpe",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tidjane Salaun",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Isaac Okoro",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jaden Ivey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anfernee Simons",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach Collins",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Noa Essengue",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Proctor",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Craig Porter Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jarrett Allen",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kyrie Irving",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Dereck Lively II",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Peyton Watson",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Wendell Moore Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Cade Cunningham",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Isaiah Stewart",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Moses Moody",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Stephen Curry",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Seth Curry",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Al Horford",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jimmy Butler III",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jae'Sean Tate",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Steven Adams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Fred VanVleet",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Ivica Zubac",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Andrew Nembhard",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Micah Potter",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Pascal Siakam",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Johnny Furphy",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Haliburton",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Bennedict Mathurin",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Yanic Konan Niederhauser",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Bradley Beal",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Maxi Kleber",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Ja Morant",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Brandon Clarke",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jahmai Mashack",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Santi Aldama",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Scotty Pippen Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach Edey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kentavious Caldwell-Pope",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Terry Rozier",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Andrew Wiggins",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Giannis Antetokounmpo",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anthony Edwards",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Bryce McGowens",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Josh Hart",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Miles McBride",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Branden Carlson",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jalen Williams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Thomas Sorber",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jonathan Isaac",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anthony Black",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Franz Wagner",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Joel Embiid",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kelly Oubre Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Tyrese Maxey",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Johni Broome",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Paul George",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Dillon Brooks",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Mark Williams",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Shaedon Sharpe",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Damian Lillard",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Devin Carter",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Drew Eubanks",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Keegan Murray",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "De'Andre Hunter",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Domantas Sabonis",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Zach LaVine",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "David Jones Garcia",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Collin Murray-Boyles",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Chucky Hepburn",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Lauri Markkanen",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Keyonte George",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jusuf Nurkic",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Jaren Jackson Jr.",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Walker Kessler",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Anthony Davis",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Leaky Black",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Trae Young",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Kyshawn George",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "D'Angelo Russell",
+      "status": "OUT",
+      "reason": ""
+    },
+    {
+      "player": "Cam Whitmore",
+      "status": "OUT",
+      "reason": ""
+    }
+  ],
+  "picks": [
+    {
+      "player": "Jalen Brunson",
+      "team": "NYK",
+      "opponent": "BKN",
+      "game": "NYK @ BKN",
+      "stat": "PTS",
+      "line": 18.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.7404,
+      "implied_prob": 0.5,
+      "edge": 0.2404,
+      "ev": 0.4808,
+      "season_avg": 26.3,
+      "last_5_avg": 20.6,
+      "last_3_avg": 20.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 7.8,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jalen Brunson",
+      "team": "NYK",
+      "opponent": "BKN",
+      "game": "NYK @ BKN",
+      "stat": "AST",
+      "line": 3.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.7169,
+      "implied_prob": 0.5,
+      "edge": 0.2169,
+      "ev": 0.4338,
+      "season_avg": 6.6,
+      "last_5_avg": 11.0,
+      "last_3_avg": 10.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 3.1,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Derrick White",
+      "team": "BOS",
+      "opponent": "MEM",
+      "game": "BOS @ MEM",
+      "stat": "PTS",
+      "line": 12.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.7024,
+      "implied_prob": 0.5,
+      "edge": 0.2024,
+      "ev": 0.4048,
+      "season_avg": 17.4,
+      "last_5_avg": 18.8,
+      "last_3_avg": 18.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 5.4,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jrue Holiday",
+      "team": "POR",
+      "opponent": "MIN",
+      "game": "POR @ MIN",
+      "stat": "AST",
+      "line": 4.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6897,
+      "implied_prob": 0.5,
+      "edge": 0.1897,
+      "ev": 0.3794,
+      "season_avg": 6.2,
+      "last_5_avg": 6.4,
+      "last_3_avg": 8.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.7,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jalen Johnson",
+      "team": "ATL",
+      "opponent": "HOU",
+      "game": "ATL @ HOU",
+      "stat": "PTS",
+      "line": 18.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6852,
+      "implied_prob": 0.5,
+      "edge": 0.1852,
+      "ev": 0.3703,
+      "season_avg": 22.9,
+      "last_5_avg": 19.0,
+      "last_3_avg": 27.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 4.9,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Karl-Anthony Towns",
+      "team": "NYK",
+      "opponent": "BKN",
+      "game": "NYK @ BKN",
+      "stat": "REB",
+      "line": 9.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6815,
+      "implied_prob": 0.5,
+      "edge": 0.1815,
+      "ev": 0.3631,
+      "season_avg": 11.8,
+      "last_5_avg": 14.0,
+      "last_3_avg": 13.7,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.8,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jaylen Brown",
+      "team": "BOS",
+      "opponent": "MEM",
+      "game": "BOS @ MEM",
+      "stat": "REB",
+      "line": 5.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6779,
+      "implied_prob": 0.5,
+      "edge": 0.1779,
+      "ev": 0.3558,
+      "season_avg": 7.0,
+      "last_5_avg": 7.4,
+      "last_3_avg": 6.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.0,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Neemias Queta",
+      "team": "BOS",
+      "opponent": "MEM",
+      "game": "BOS @ MEM",
+      "stat": "REB",
+      "line": 7.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6778,
+      "implied_prob": 0.5,
+      "edge": 0.1778,
+      "ev": 0.3556,
+      "season_avg": 8.3,
+      "last_5_avg": 8.4,
+      "last_3_avg": 8.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.3,
+        "season_margin_ok": false,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jayson Tatum",
+      "team": "BOS",
+      "opponent": "MEM",
+      "game": "BOS @ MEM",
+      "stat": "REB",
+      "line": 4.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6749,
+      "implied_prob": 0.5,
+      "edge": 0.1749,
+      "ev": 0.3498,
+      "season_avg": 8.5,
+      "last_5_avg": 8.5,
+      "last_3_avg": 8.5,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 4.0,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jalen Johnson",
+      "team": "ATL",
+      "opponent": "HOU",
+      "game": "ATL @ HOU",
+      "stat": "AST",
+      "line": 6.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6711,
+      "implied_prob": 0.5,
+      "edge": 0.1711,
+      "ev": 0.3422,
+      "season_avg": 8.1,
+      "last_5_avg": 6.4,
+      "last_3_avg": 8.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [
+        "L5_BELOW_LINE"
+      ],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": false,
+        "season_margin": 1.6,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Dyson Daniels",
+      "team": "ATL",
+      "opponent": "HOU",
+      "game": "ATL @ HOU",
+      "stat": "AST",
+      "line": 4.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.669,
+      "implied_prob": 0.5,
+      "edge": 0.169,
+      "ev": 0.3381,
+      "season_avg": 6.1,
+      "last_5_avg": 6.4,
+      "last_3_avg": 4.7,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.6,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "CJ McCollum",
+      "team": "ATL",
+      "opponent": "HOU",
+      "game": "ATL @ HOU",
+      "stat": "PTS",
+      "line": 12.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6658,
+      "implied_prob": 0.5,
+      "edge": 0.1658,
+      "ev": 0.3316,
+      "season_avg": 18.4,
+      "last_5_avg": 18.4,
+      "last_3_avg": 16.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 5.9,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jabari Smith Jr.",
+      "team": "HOU",
+      "opponent": "ATL",
+      "game": "ATL @ HOU",
+      "stat": "REB",
+      "line": 5.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6654,
+      "implied_prob": 0.5,
+      "edge": 0.1654,
+      "ev": 0.3308,
+      "season_avg": 6.8,
+      "last_5_avg": 4.6,
+      "last_3_avg": 6.7,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [
+        "L5_BELOW_LINE"
+      ],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": false,
+        "season_margin": 1.8,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "OG Anunoby",
+      "team": "NYK",
+      "opponent": "BKN",
+      "game": "NYK @ BKN",
+      "stat": "PTS",
+      "line": 12.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6616,
+      "implied_prob": 0.5,
+      "edge": 0.1616,
+      "ev": 0.3232,
+      "season_avg": 16.9,
+      "last_5_avg": 20.0,
+      "last_3_avg": 23.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 4.9,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jerami Grant",
+      "team": "POR",
+      "opponent": "MIN",
+      "game": "POR @ MIN",
+      "stat": "PTS",
+      "line": 12.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.659,
+      "implied_prob": 0.5,
+      "edge": 0.159,
+      "ev": 0.318,
+      "season_avg": 18.5,
+      "last_5_avg": 19.4,
+      "last_3_avg": 24.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 6.5,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jalen Duren",
+      "team": "DET",
+      "opponent": "GSW",
+      "game": "GSW @ DET",
+      "stat": "PTS",
+      "line": 12.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6571,
+      "implied_prob": 0.5,
+      "edge": 0.1571,
+      "ev": 0.3142,
+      "season_avg": 19.1,
+      "last_5_avg": 19.6,
+      "last_3_avg": 22.3,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": true,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 6.6,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Julius Randle",
+      "team": "MIN",
+      "opponent": "POR",
+      "game": "POR @ MIN",
+      "stat": "REB",
+      "line": 5.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6413,
+      "implied_prob": 0.5,
+      "edge": 0.1413,
+      "ev": 0.2825,
+      "season_avg": 6.8,
+      "last_5_avg": 8.8,
+      "last_3_avg": 8.0,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.8,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Immanuel Quickley",
+      "team": "TOR",
+      "opponent": "DEN",
+      "game": "TOR @ DEN",
+      "stat": "AST",
+      "line": 4.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6412,
+      "implied_prob": 0.5,
+      "edge": 0.1412,
+      "ev": 0.2825,
+      "season_avg": 6.0,
+      "last_5_avg": 8.8,
+      "last_3_avg": 7.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.0,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Alperen Sengun",
+      "team": "HOU",
+      "opponent": "ATL",
+      "game": "ATL @ HOU",
+      "stat": "REB",
+      "line": 6.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6405,
+      "implied_prob": 0.5,
+      "edge": 0.1405,
+      "ev": 0.281,
+      "season_avg": 8.9,
+      "last_5_avg": 8.9,
+      "last_3_avg": 8.9,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.4,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jamal Murray",
+      "team": "DEN",
+      "opponent": "TOR",
+      "game": "TOR @ DEN",
+      "stat": "PTS",
+      "line": 19.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6401,
+      "implied_prob": 0.5,
+      "edge": 0.1401,
+      "ev": 0.2802,
+      "season_avg": 25.1,
+      "last_5_avg": 27.2,
+      "last_3_avg": 21.0,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 5.6,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Amen Thompson",
+      "team": "HOU",
+      "opponent": "ATL",
+      "game": "ATL @ HOU",
+      "stat": "REB",
+      "line": 5.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.639,
+      "implied_prob": 0.5,
+      "edge": 0.139,
+      "ev": 0.2781,
+      "season_avg": 7.8,
+      "last_5_avg": 7.8,
+      "last_3_avg": 5.7,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.3,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Rudy Gobert",
+      "team": "MIN",
+      "opponent": "POR",
+      "game": "POR @ MIN",
+      "stat": "REB",
+      "line": 9.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6388,
+      "implied_prob": 0.5,
+      "edge": 0.1388,
+      "ev": 0.2776,
+      "season_avg": 11.4,
+      "last_5_avg": 11.8,
+      "last_3_avg": 10.7,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.4,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jaylen Brown",
+      "team": "BOS",
+      "opponent": "MEM",
+      "game": "BOS @ MEM",
+      "stat": "AST",
+      "line": 3.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6378,
+      "implied_prob": 0.5,
+      "edge": 0.1378,
+      "ev": 0.2757,
+      "season_avg": 5.1,
+      "last_5_avg": 7.4,
+      "last_3_avg": 7.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.6,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Alperen Sengun",
+      "team": "HOU",
+      "opponent": "ATL",
+      "game": "ATL @ HOU",
+      "stat": "AST",
+      "line": 4.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6364,
+      "implied_prob": 0.5,
+      "edge": 0.1364,
+      "ev": 0.2728,
+      "season_avg": 6.1,
+      "last_5_avg": 6.1,
+      "last_3_avg": 6.1,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.1,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "RJ Barrett",
+      "team": "TOR",
+      "opponent": "DEN",
+      "game": "TOR @ DEN",
+      "stat": "PTS",
+      "line": 15.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6315,
+      "implied_prob": 0.5,
+      "edge": 0.1315,
+      "ev": 0.2629,
+      "season_avg": 19.0,
+      "last_5_avg": 24.4,
+      "last_3_avg": 27.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 3.5,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jayson Tatum",
+      "team": "BOS",
+      "opponent": "MEM",
+      "game": "BOS @ MEM",
+      "stat": "PTS",
+      "line": 14.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.631,
+      "implied_prob": 0.5,
+      "edge": 0.131,
+      "ev": 0.2619,
+      "season_avg": 20.7,
+      "last_5_avg": 20.7,
+      "last_3_avg": 20.7,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 6.2,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Nickeil Alexander-Walker",
+      "team": "ATL",
+      "opponent": "HOU",
+      "game": "ATL @ HOU",
+      "stat": "PTS",
+      "line": 15.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6291,
+      "implied_prob": 0.5,
+      "edge": 0.1291,
+      "ev": 0.2582,
+      "season_avg": 20.3,
+      "last_5_avg": 21.4,
+      "last_3_avg": 25.3,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 5.3,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Alperen Sengun",
+      "team": "HOU",
+      "opponent": "ATL",
+      "game": "ATL @ HOU",
+      "stat": "PTS",
+      "line": 14.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6273,
+      "implied_prob": 0.5,
+      "edge": 0.1273,
+      "ev": 0.2546,
+      "season_avg": 20.3,
+      "last_5_avg": 20.3,
+      "last_3_avg": 20.3,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 5.8,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Naz Reid",
+      "team": "MIN",
+      "opponent": "POR",
+      "game": "POR @ MIN",
+      "stat": "REB",
+      "line": 4.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.624,
+      "implied_prob": 0.5,
+      "edge": 0.124,
+      "ev": 0.2481,
+      "season_avg": 6.2,
+      "last_5_avg": 6.4,
+      "last_3_avg": 6.7,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.7,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Kevin Durant",
+      "team": "HOU",
+      "opponent": "ATL",
+      "game": "ATL @ HOU",
+      "stat": "PTS",
+      "line": 22.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6223,
+      "implied_prob": 0.5,
+      "edge": 0.1223,
+      "ev": 0.2446,
+      "season_avg": 25.7,
+      "last_5_avg": 25.0,
+      "last_3_avg": 24.0,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": true,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 3.7,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Naz Reid",
+      "team": "MIN",
+      "opponent": "POR",
+      "game": "POR @ MIN",
+      "stat": "PTS",
+      "line": 11.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6148,
+      "implied_prob": 0.5,
+      "edge": 0.1148,
+      "ev": 0.2295,
+      "season_avg": 13.7,
+      "last_5_avg": 10.4,
+      "last_3_avg": 12.7,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [
+        "L5_BELOW_LINE"
+      ],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": false,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": false,
+        "season_margin": 2.7,
+        "season_margin_ok": false,
+        "min_avg_ok": false,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Jayson Tatum",
+      "team": "BOS",
+      "opponent": "MEM",
+      "game": "BOS @ MEM",
+      "stat": "AST",
+      "line": 3.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6132,
+      "implied_prob": 0.5,
+      "edge": 0.1132,
+      "ev": 0.2265,
+      "season_avg": 4.0,
+      "last_5_avg": 4.0,
+      "last_3_avg": 4.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": false,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.0,
+        "season_margin_ok": false,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Derrick White",
+      "team": "BOS",
+      "opponent": "MEM",
+      "game": "BOS @ MEM",
+      "stat": "AST",
+      "line": 3.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6131,
+      "implied_prob": 0.5,
+      "edge": 0.1131,
+      "ev": 0.2261,
+      "season_avg": 5.6,
+      "last_5_avg": 5.8,
+      "last_3_avg": 4.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": false,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 2.1,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Scottie Barnes",
+      "team": "TOR",
+      "opponent": "DEN",
+      "game": "TOR @ DEN",
+      "stat": "PTS",
+      "line": 15.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6127,
+      "implied_prob": 0.5,
+      "edge": 0.1127,
+      "ev": 0.2254,
+      "season_avg": 18.7,
+      "last_5_avg": 17.8,
+      "last_3_avg": 19.0,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": false,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 3.7,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Karl-Anthony Towns",
+      "team": "NYK",
+      "opponent": "BKN",
+      "game": "NYK @ BKN",
+      "stat": "PTS",
+      "line": 14.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6114,
+      "implied_prob": 0.5,
+      "edge": 0.1114,
+      "ev": 0.2228,
+      "season_avg": 20.0,
+      "last_5_avg": 23.0,
+      "last_3_avg": 25.7,
+      "is_home": 0,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": false,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 6.0,
+        "season_margin_ok": true,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Kevin Durant",
+      "team": "HOU",
+      "opponent": "ATL",
+      "game": "ATL @ HOU",
+      "stat": "AST",
+      "line": 3.5,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6103,
+      "implied_prob": 0.5,
+      "edge": 0.1103,
+      "ev": 0.2205,
+      "season_avg": 4.4,
+      "last_5_avg": 3.0,
+      "last_3_avg": 3.7,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [
+        "L5_BELOW_LINE"
+      ],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": false,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": false,
+        "season_margin": 0.9,
+        "season_margin_ok": false,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    },
+    {
+      "player": "Amen Thompson",
+      "team": "HOU",
+      "opponent": "ATL",
+      "game": "ATL @ HOU",
+      "stat": "AST",
+      "line": 4.0,
+      "over_odds": -110,
+      "book": "estimated",
+      "model_prob": 0.6076,
+      "implied_prob": 0.5,
+      "edge": 0.1076,
+      "ev": 0.2152,
+      "season_avg": 5.3,
+      "last_5_avg": 5.6,
+      "last_3_avg": 6.3,
+      "is_home": 1,
+      "has_live_line": false,
+      "warnings": [],
+      "passes_lock_filter": false,
+      "passes_parlay_filter": false,
+      "filter_details": {
+        "odds_ok": true,
+        "l3_clears_line": true,
+        "l5_clears_line": true,
+        "season_margin": 1.3,
+        "season_margin_ok": false,
+        "min_avg_ok": true,
+        "unusual_line": false
+      }
+    }
+  ],
+  "locks": [
+    "Jalen Brunson",
+    "Derrick White",
+    "Jrue Holiday",
+    "Jalen Johnson",
+    "Jalen Duren"
+  ],
+  "parlay_3leg": {
+    "legs": [
+      "PTS O18.5 (74%)",
+      "PTS O12.0 (70%)",
+      "AST O4.5 (69%)"
+    ],
+    "combined_prob": 0.3587,
+    "players": [
+      "Jalen Brunson",
+      "Derrick White",
+      "Jrue Holiday"
+    ]
+  },
+  "parlay_5leg": {
+    "legs": [
+      "PTS O18.5 (74%)",
+      "PTS O12.0 (70%)",
+      "AST O4.5 (69%)",
+      "PTS O18.0 (69%)",
+      "PTS O12.5 (66%)"
+    ],
+    "combined_prob": 0.1615,
+    "players": [
+      "Jalen Brunson",
+      "Derrick White",
+      "Jrue Holiday",
+      "Jalen Johnson",
+      "Jalen Duren"
+    ]
+  },
+  "model_stats": {
+    "PTS": {
+      "auc": 0.626,
+      "hit_rate_70": 0.628
+    },
+    "REB": {
+      "auc": 0.617,
+      "hit_rate_70": 0.629
+    },
+    "AST": {
+      "auc": 0.658,
+      "hit_rate_70": 0.632
+    }
+  },
+  "results": null
+}
